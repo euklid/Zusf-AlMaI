@@ -1,0 +1,827 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE BEER-WARE LICENSE (Revision 42):                                            %
+% <r@twopi.eu> schrieb diese Datei. Solange Sie diesen Vermerk nicht entfernen,   %
+% können Sie mit dem Material machen, was Sie möchten. Wenn wir uns eines Tages   %
+% treffen und Sie denken, das Material ist es wert, können Sie mir dafür ein Bier %
+% ausgeben. Robert Hemstedt                                                       %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{ucs}
+\usepackage[left=2.0cm, right=2.0cm, top=2.0cm, bottom=2.0cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[ngerman]{babel}
+\usepackage{amssymb}
+\usepackage[amsthm,thmmarks]{ntheorem}
+% b) Lemma, Satz, Theorem usw.
+\makeatletter
+\renewtheoremstyle{plain}%
+  {\item[\hskip\labelsep \theorem@headerfont ##1\ ##2:]}%
+  {\item[\hskip\labelsep \theorem@headerfont ##1~##2~##3:]\mbox{}}
+\makeatother
+
+\theoremstyle{plain}
+\newtheorem{Theorem}{Theorem}[section]
+\newtheorem{Satz}[Theorem]{Satz}
+\newtheorem{Prop}[Theorem]{Proposition}
+\newtheorem{Lemma}[Theorem]{Lemma}
+\newtheorem{Korollar}[Theorem]{Korollar}
+\newtheorem{Definition}[Theorem]{Definition}
+\newtheorem*{Folgerung}[Theorem]{Folgerung}
+\newtheorem*{Behauptung}[Theorem]{Behauptung}  
+
+\theorembodyfont{\upshape}
+\newtheorem{Bemerkung}[Theorem]{Bemerkung} 
+\newtheorem{Beispiel}[Theorem]{Beispiel}
+\newtheorem{Entscheidungsproblem}[Theorem]{Entscheidungsproblem}
+\newtheorem{Algorithmus}[Theorem]{Algorithmus}
+\newtheorem{Berechnungsproblem}[Theorem]{Berechnungsproblem}
+   
+
+\newcommand{\herv}[1]{{\emph{\textbf{#1}}}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\cupdot}{\mathbin{\dot{\cup}}}
+
+\numberwithin{equation}{section}
+
+\newsavebox{\fmbox}
+\newenvironment{fmpage}[1]
+{\begin{lrbox}{\fmbox}\begin{minipage}{#1}}
+{\end{minipage}\end{lrbox}\fbox{\usebox{\fmbox}}}
+
+\linespread{1.05}
+\author{Robert Hemstedt \\ \texttt{r@twopi.eu}}
+\title{Zusammenfassung\footnote{nach meinen pers\"onlichen Aufzeichnungen}  Algorithmische Mathematik I\newline \newline \large{gehalten von Prof. Dr. Jens Vygen, Universität Bonn} \\im Wintersemester 2012/2013}
+\begin{document}
+\maketitle
+\section*{Hinweise zur Verwendung}
+Die stets aktuelle Version dieser Zusammenfassung lässt sich finden unter\\
+\texttt{http://github.com/euklid/Zusf-AlMaI} .\\
+Dort sind auch die \texttt{.tex}-Dateien zu finden, wenn man selbst Veränderungen vornehmen möchte. Bitte beachtet die \textbf{Lizenzhinweise}.\\
+
+Werter Kommilitone, diese Zusammenfassung basiert zum größten Teil auf meinen Mitschriften unserer AlMa-Vorlesungen bei Prof. Dr. Vygen sowie teilweise auf seinem Skript. Leider ist das Skript nur als PDF-Datei abrufbar, sodass ich mich während meiner Weihnachtsferien mal drangesetzt habe, selbst eine Zusammenfassung zu texen, da die Guttenberg-Tastatur bei \LaTeX - Dokumenten leider nicht so effektiv ist.
+
+Was die Nummerierung der Sätze und Kapitelabschnitte angeht, so ist sie nicht mit der aus dem offiziellen Skript identisch. Weiterhin sind manche Sätze, was die Laufzeit von Algorithmen an geht, weggelassen und die Laufzeit beim Algorithmus vermerkt. Ebenso wirst du nur Pseudo-Code finden, die Implementierung bitte im Originalskript beispielsweise nachlesen.
+
+Gedacht ist diese Zusammenfassung explizit als Prüfungsvorbereitung und wird daher auch noch bis zur letzten Vorlesung weiterhin ergänzt. Wenn du Anmerkungen, Ergänzungen, Lob oder Kritik haben solltest, dann sprich mich einfach an, schick mir eine E-Mail oder, was das beste wohl ist, benutze \texttt{github.com}, um mir eine \textit{pull}-Request zu schicken.
+
+Ich hafte weder für \glqq fehlende\grqq\ Inhalte noch für inhaltliche oder sprachliche Fehler. Weiterhin möchte ich hier an dieser Stelle noch einmal darauf hinweisen, dass das Vorlesungsskript von Herrn Prof. Dr. Vygen auf seiner Homepage mit diesem Link abrufbar ist: \\
+\texttt{http://www.or.uni-bonn.de/\~vygen/lectures/alma/alma.pdf} \\und \emph{er} der Verfasser des offiziellen Vorlesungsskript ist.
+
+Ich hoffe, dass diese Zusammenfassung und der damit verbundene Aufwand sich nicht nur für mich als Verfasser, sondern auch noch für dich als Kommilitone lohnen wird und der Aufwand auch in Form einer möglichst guten Klausurnote entlohnt wird. \\
+Viel Spaß beim Lernen! \newpage
+\section*{Lizenz}
+Ich veröffentliche dieses Dokument unter der Beerware-Lizenz:\\ \\
+\hspace{-3.5cm}
+\begin{fmpage}{\textwidth}
+\glqq THE BEER-WARE LICENSE\grqq\ (Revision 42):\\
+\texttt{$<$r@twopi.eu$>$} schrieb diese Datei. Solange Sie diesen Vermerk nicht entfernen, können Sie mit dem Material machen, was Sie möchten. Wenn wir uns eines Tages treffen und Sie denken, das Material ist es wert, können Sie mir dafür ein Bier ausgeben. Robert Hemstedt
+\end{fmpage}
+\hspace{3.5cm} \\
+Weitere Hinweise lassen sich finden unter: \texttt{http://de.wikipedia.org/wiki/Beerware}
+\section{Einleitung}
+Algorithmus (keine formale Definition): \glqq ein Programm \grqq \begin{itemize}
+\item Was wird als Eingabe akzeptiert?
+\item Welche Rechenschritte werden in welcher Reihenfolge (eventuell abhängig von der Eingabe oder Zwischenergebnissen) durchgeführt?
+\item Wann stoppt der Algorithmus und was wird dann ausgegeben?
+\end{itemize}
+\begin{Definition}
+Seien A und B zwei Mengen. Dann ist deren \herv{Produkt} durch \\
+$A\times B := \{(a,b): a \in A, b\in B \}$ \\
+Eine \herv{Relation} auf (A,B) ist eine Teilmenge von $A\times B $
+\end{Definition}
+\begin{Definition}
+Seien A und B Mengen und $f\subseteq A\times B$, so dass es für jedes $a \in A$ genau ein b gibt mit $(a,b)\in f$. Dann heißt f \herv{Funktion} von A nach B. Statt $(a,b) \in f$ schreiben wir $f(a)=b$ oder $a \mapsto f(a)$. \\
+Wir schreiben auch $f: A \rightarrow B$.\\
+Eine Funktion $f: A\rightarrow B$ heißt 
+\begin{itemize}
+\item \herv{injektiv}, wenn $f(a)\neq f(a') \forall\ a,a'\in A$ mit $a\neq a'$
+\item \herv{surjektiv}, wenn $\forall b\in B\  \exists a \in A: f(a)=b$
+\item \herv{bijektiv}, wenn $f$ injektiv und surjektiv (\herv{Bijektion})
+\end{itemize}
+Zwei Mengen A und B sind \herv{gleichmächtig}, wenn es eine Bijektion $f: A\rightarrow B$ gibt. Wir schreiben auch $|A|=|B|$. Eine Menge heißt $endlich$, wenn es eine injektive Funktion $f:A \rightarrow \{1,\ldots,n\}$ gibt für ein $n \in \mathbb{N}$ gibt, andernfalls \herv{überabzählbar}.
+\end{Definition}
+\begin{Definition}
+Sei A eine nichtleere endliche Menge. Für $k\in \mathbb{N}\cup\{0\}$ bezeichnen wir mit $A^k$ die Menge der Funktionen $f:\{1,\ldots,k\}\rightarrow A$. Ein Element $f\in A^k$ schreiben wir als Folge $f(1),f(2),\ldots,f(k)$ und bezeichnen es als \herv{Wort} (oder \herv{Zeichenkette}) der \herv{Länge} k über ein \herv{Alphabet} A. Das einzige Element $\emptyset$ von $A^0$ nennen wir das \herv{leere Wort}. \\
+Wir setzen $A^*:=\bigcup_{k\in \mathbb{N}\cup\{0\}} A^k$. Ein \herv{Sprache} über dem Alphabet A ist eine Teilmenge von $A^*$.
+\end{Definition}
+\begin{Definition}
+Ein \herv{Berechnungsproblem} ist eine Relation $P\subseteq D\times E$, wobei zu jedem $d \in D$ ein $e \in E$ existiert mit $(d,e)\in P$. \\
+Wenn $(d,e)\in P$, so ist e eine \herv{korrekte Ausgabe} für das Problem P mit der Eingabe d.\\
+P heißt \herv{eindeutig}, wenn P eine Funktion ist.\\
+Sind D und E Sprachen über einem endlichen Alphabet, so heißt P \herv{diskretes Berechnungsproblem}.\\
+Sind D und E Teilmenge von $\mathbb{R}^m$ bzw. $\mathbb{R}^n$, so heißt P \herv{numerisches Berechnungsproblem}.\\
+Ein eindeutiges Berechnungsproblem $(D,E)$ mit $|E|=2$ heißt \herv{Entscheidungsproblem}.
+\end{Definition}
+\begin{Definition}
+Eine natürliche Zahl $n\in \mathbb{N}$ heißt \herv{prim}, wenn $n\geq 2$ ist und es keine natürlichen Zahlen $a>1$ und $b>1$ gibt mit $n=a\cdot b$.
+\end{Definition}
+\begin{Entscheidungsproblem}[\glqq prim?\grqq]\\
+formal ausgedrückt: $\{(n,e)\in \mathbb{N}\times \{0;1\}:e=1 \Leftrightarrow n \text{ prim} \}$\\
+\textbf{Eingabe:} $n\in \mathbb{N}$\\
+\textbf{Frage:} Ist n prim? \\
+\textbf{Naiver Algorithmus:} Teste $n\geq 2$, und dann $\forall a,b\in \{2,\ldots,\lfloor\frac{n}{2}\rfloor\}$, teste ob $n=a\cdot b$.\\
+Braucht bis zu $\left(\frac{n}{2}-1 \right)^2$ Multiplikationen $\Rightarrow$ Laufzeit $O(n^2)$.
+\end{Entscheidungsproblem}
+\begin{Algorithmus}[Einfacher Primzahltest]\\
+\textbf{Eingabe:} $n\in \mathbb{N}$\\
+\textbf{Ausgabe:} die Antwort auf die Frage, ob $n$ prim ist. \\
+\textbf{if} $n=1$ \textbf{then} antwort $\leftarrow$ nein \textbf{else} antwort $\leftarrow$ ja\\
+\textbf{for} $i$ $\leftarrow$ 2 \textbf{to} $\lfloor \sqrt{n} \rfloor$ \textbf{do}: \\
+\text{\qquad}\textbf{if} ($i$ ist Teiler von $n$) \textbf{then} antwort $\leftarrow$ nein \\
+\textbf{output} antwort \newline
+Hat Laufzeit $O(\sqrt{n})$.
+\end{Algorithmus}
+\begin{Definition}
+Für $x\in \mathbb{R}$ sei $\lfloor x \rfloor := max\{k\in \mathbb{Z}: k\leq x\}$ und $\lceil x\rceil := min\{k\in \mathbb{Z}: k\geq x\}$.\\
+Für $a,b\in \mathbb{N}$ sei $a\text{ mod }b := a-b\lfloor\frac{a}{b}\rfloor$
+\end{Definition}
+\begin{Definition}[Landau-Symbole]
+Sei $g: \mathbb{N} \rightarrow \mathbb{R}_{\geq 0}$. Dann definieren wir: \\
+$O(g):=\{f:\mathbb{N}\rightarrow\mathbb{R}_{\geq 0}: \exists \alpha >0\ \exists n_0 \in \mathbb{N}\ \forall n\geq n_0: f(n)\leq \alpha g(n)\}$ \\
+$\Omega(g):=\{f:\mathbb{N}\rightarrow\mathbb{R}_{\geq 0}: \exists \alpha >0\ \exists n_0 \in \mathbb{N}\ \forall n\geq n_0: f(n)\geq \alpha g(n)\}$\\
+$\Theta(g):=O(g)\cap\Omega(g)$ \\
+Statt $f\in O(g)$ sagen wir auch \glqq $f$ ist $O(g)$\grqq oder sogar \glqq$f=O(g)$\grqq
+\end{Definition}
+\begin{Berechnungsproblem}[Liste von Primzahlen]\\
+\textbf{Eingabe:} $n \in \N$ \\
+\textbf{Ausgabe:} Berechne alle Primzahlen $p$ mit $p\leq n$\\
+\textbf{Naiver Algorithmus:} rufe für $i=2,\ldots,n$ \texttt{primality\_check($i$)} auf\\
+Laufzeit:$\sum_{i=2}^n \sqrt{i}=O(n\sqrt{n})=\Theta(n\sqrt{n})$
+\end{Berechnungsproblem}
+\begin{Algorithmus}[Sieb des Erathostenes]\\
+\textbf{Eingabe:} $n \in \N$\\
+\textbf{Ausgabe:} Alle Primzahlen $p$ mit $p\leq n$\\
+\textbf{for} $i \leftarrow 2$ \textbf{to} $n$ \textbf{do}: $p(i) \leftarrow$ja\\
+\textbf{for} $i\leftarrow 2$ \textbf{to} $n$ \textbf{do:}\\
+\text{\qquad}\textbf{if} $p(i)=$ja \textbf{then}:\\
+\text{\qquad \qquad}\textbf{output} $i$\\
+\text{\qquad \qquad}\textbf{for} $j\leftarrow i$ \textbf{to} $\lfloor\frac{n}{i}\rfloor$ \textbf{do}: $p(i\cdot j) \leftarrow$ nein \\
+Hat Laufzeit $O(n\log n)$.
+\end{Algorithmus}
+\begin{Lemma}
+Sei $k\in \N, l\in \N\cup\{0\}$. Definiere $f^l: \{0,\ldots,k-1\}^l\rightarrow \{0,\ldots,k^ l-1\}$ durch $f^l(w):=\sum_{i=1}^l a_i k^{l-i}$ für $w=a_1\ldots a_l$. Dann ist $f^l$ wohldefiniert und bijektiv.
+\end{Lemma}
+\begin{Satz}
+Sei $A$ eine nichtleere endliche Menge, Dann ist $A^*$ abzählbar.
+\end{Satz}
+\begin{Korollar}
+Die Menge aller C++-Programme ist abzählbar.
+\end{Korollar}
+\begin{Satz}
+Es gibt Funktionen $f: \N\rightarrow \{0;1\}$, die von keinem C++-Programm berechnet werden.
+\end{Satz}
+Sei $Q$ die abzählbare Menge der C++-Programme, die eine natürliche Zahl als Eingabe akzeptieren. Sei $g: \N \rightarrow Q$ eine surjektive Funktion. Definiere $f:\N\times\N \rightarrow \{0,1\}$ durch \\
+$f(x,y):=\left\lbrace\begin{array}{l}
+1, \text{ falls }g(x) \text{ bei Eingabe }y\text{ nach endlich vielen Schritten hält.}\\ 
+0, \text{ sonst.}
+\end{array} \right.$\\
+Diese Entscheidungsproblem heißt \textbf{Halteproblem}.
+\begin{Satz}
+$f$ wird von keinem C++-Programm berechnet.
+\end{Satz}
+\section{Darstellung ganzer Zahlen}
+\begin{Satz}
+Seien $b\in \N, b\geq 2, n\in \N$. Dann existieren eindeutig bestimmte Zahlen $l \in \N$ und $z_i\in\{0,\ldots,b-1\}$ für $i=0,\ldots,l-1$ mit $z_{l-1}\neq 0$ und \\
+\[n=\sum_{i=0}^{l-1}{z_ib^i}.\] Das Wort $z_{l-1}\ldots z_0$ heißt auch die \herv{$b$-adische Darstellung} von $n$. Es gilt stets $l-1=\lfloor\log_b n\rfloor$.
+\end{Satz}
+\begin{Definition}
+Seien $l$ und $b\geq 2$ natürliche Zahlen. Sei $n\in \{0,\ldots,b^l-1\}$. Dann ist
+\renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
+\begin{enumerate}
+\item $K_{b-1}^{b,l}(n):=b^l-1-n$ das ($l$-stellige) ($b$-1)-Komplement von $n$ (zur Basis $b$)
+\item $K_b^{b,l}(n):=\left(b^l-n\right)\mod b^l$ das ($l$-stellige) $b$-Komplement von $n$ (zur Basis $b$)
+\end{enumerate}
+\end{Definition}
+\begin{Lemma}
+Sei $b,l\in\N, b\geq 2$. Sei $n=\sum_{i=0}^{l-1}{z_ib^i}$ mit $z_i\in\{0,\ldots,b-1\}$ für $i=0,\ldots,l-1$. Dann gilt:
+\renewcommand{\labelenumi}{\emph{(\roman{enumi})}}
+\begin{enumerate}
+\item $K_{b-1}^{b,l}(n)=\sum_{i=0}^{l-1}{\left(b-1-z_i\right) b^i}$;
+\item $K_b^{b,l}(n+1)=\sum_{i=0}^{l-1}{\left(b-1-z_i\right)}$ wobei $n\neq b^l-1$; außerdem $K_b^{b,l}(0)=0$;
+\item $K_{b-1}^{b,l}\left(K_{b-1}^{b,l}(n)\right)=n$;
+\item $K_{b}^{b,l}\left(K_{b}^{b,l}(n)\right)=n$
+\end{enumerate}
+\end{Lemma}
+\begin{Satz}
+Seien l und $b\geq 2$ natürliche Zahlen. Sei $Z:=\left\lbrace -\left\lceil\frac{b^l-1}{2}\right\rceil,\ldots,\left\lfloor\frac{b^l-1}{2}\right\rfloor\right\rbrace$. \\ Sei $f:Z \rightarrow \left\lbrace 0,\ldots,b^l-1 \right\rbrace$ die durch $z\mapsto \left(z+b^l \right) \mod b^l$ definierte Bijektion. Seien $x,y \in Z$, dann gilt:
+\renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
+\begin{enumerate}
+\item Ist $x+y \in Z$, dann ist $f(x+y)=(f(x)+f(y))\mod b^l$
+\item Ist $x\cdot y \in Z$, dann ist $f(x\cdot y)=(f(x)\cdot f(y))\mod b^l$
+\item Ist $-x \in Z$, so gilt $f(-x)=K_b^{b,l}(x)$
+\item Sei b=2, dann ist $x\geq 0$ genau dann, wenn die erste Stelle der l-stelligen Binärdarstellung von x 0 ist.
+\end{enumerate}
+\end{Satz}
+\section{Rechnen mit ganzen Zahlen}
+\subsection{Addition und Subtraktion}
+\begin{Prop}
+Für zwei ganze Zahlen x und y können die Summe x+y und Differenz x-y in Laufzeit O(l) berechnet werden, wobei $l=1+\lfloor \log_2(max\{|x|,|y|,1\}\rfloor$ ist.
+\end{Prop}
+\subsection{Multiplikation}
+Zwei Zahlen mit bis zu l Stellen nach der Schulmethode zu multiplizieren braucht $O(l^2)$ Zeit.
+\begin{Algorithmus}[Karatsuba]\\
+\textbf{Eingabe:} $x,y \in \N$, in Binärdarstellung\\
+\textbf{Ausgabe:} $x\cdot y$ in Binärdarstellung\\
+\textbf{if} $x<8$ \textbf{and} $y<8$ \textbf{then output} $x\cdot y$ (direkte Multiplikation).\\
+\textbf{else:}\\
+\text{\qquad}$l \leftarrow 1+ \lfloor \log_2 (\max\{x,y\})\rfloor$\\
+\text{\qquad}$K \leftarrow \lfloor \frac{l}{2} \rfloor$ \\
+\text{\qquad}$B \leftarrow 2^k$\\
+\text{\qquad}$x' \leftarrow \lfloor\frac{x}{B} \rfloor$\\
+\text{\qquad}$x'' \leftarrow x\mod B$\\
+\text{\qquad}$y' \leftarrow \lfloor\frac{y}{B} \rfloor$\\
+\text{\qquad}$y'' \leftarrow y\mod B$\\
+\text{\qquad}$p \leftarrow x'\cdot y'$\text{\qquad (rekursiv)}\\
+\text{\qquad}$q \leftarrow x''\cdot y''$\text{\qquad (rekursiv)}\\
+\text{\qquad}$ r\leftarrow (x'+x'')\cdot (y'+y'')$\text{\qquad (rekursiv)}\\
+\text{\qquad}\textbf{output} $p\cdot B^2+(r-p-q)\cdot B+q$
+\end{Algorithmus}
+\begin{Satz}
+Die Multiplikation zweier in Binärdarstellung gegebener Zahlen x und y ist mit \mbox{Karatsubas} Algorithmus in Laufzeit $O(l^{\log_2 3})$ möglich, wobei $l=1+\lfloor\log_2(\max\{x,y\})\rfloor$ ist.
+\end{Satz}
+\subsection{Euklidischer Algorithmus}
+\begin{Definition}
+Für $a,b \in \N$ ist $\emph{ggT}(a,b)$ der größte gemeinsame Teiler von a und b. Gilt $\emph{ggT}(a,b)=1$, so heißen a und b \herv{teilerfremd}.\\
+Ferner setzen wir $\emph{ggT}(a,0):=a\  \forall a \in \N, \emph{ggT}(0,0):=0$. Für $a,b\in \N$ ist das $\emph{kgV}(a,b)$ das kleinste gemeinsame Vielfache.
+\end{Definition}
+\begin{Lemma}
+Für alle $a, b \in \N$ gilt:
+\renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
+\begin{enumerate}
+\item $a\cdot b = \emph{ggT}(a,b)\cdot \emph{kgV}(a,b)$
+\item $\emph{ggT}(a,b)= \emph{ggT}(a\mod b, b)$
+\end{enumerate}
+\end{Lemma}
+\begin{Algorithmus}[Euklidischer Algorithmus] \\
+\textbf{Eingabe:} $a,b\in\N$\\
+\textbf{Ausgabe:} ggT$(a,b)$\\
+\textbf{while} $a>0$ \textbf{and} $b>0$ \textbf{do:}\\
+\text{\qquad}\textbf{if}$a<b$ \textbf{then} $b\leftarrow b\mod a$ \textbf{else} $a\leftarrow a\mod b$\\
+\textbf{output} $\max\{a,b\}$
+\end{Algorithmus}
+Fibonacci-Zahlen: $F_0:=1, F_1:=1, F_{n+1}:=F_n+F_{n-1}, n\in\N$
+\begin{Lemma} $\forall n\in N\cup\{0\}:$\\
+\[ F_n=\frac{1}{\sqrt{5}}\left(\left(\frac{1+\sqrt{5}}{2}\right)^n-\left(\frac{1-\sqrt{5}}{2}\right)^n \right) \]
+\end{Lemma}
+\begin{Lemma}
+Falls $a>b>0$ und Euklidischer Algorithmus $k\geq 1$ Iterationen der while-Schleife durchläuft, so gilt $a\geq F_{k+2} und b\geq F_{k+1}$.
+\end{Lemma}
+\begin{Satz}[Lamé] Falls $a\geq b$ und $b<F_{k+1}$ für ein $k\in\N$, so durchläuft der euklidische Algorithmus weniger als k Iterationen der while-Schleife.
+\end{Satz}
+\begin{Bemerkung}
+$k\in\N: ggT(F_{k+2},F_{k+1})$ braucht $k$ Iterationen.\\
+$F_n>\Phi^{n-2}$ mit $\Phi=\frac{1+\sqrt{5}}{2}$
+\end{Bemerkung}
+\begin{Korollar}
+Falls $a\geq b\geq 0$, so durchläuft euklidischer Algorithmus höchstens $\lceil \log_{\Phi}b \rceil$ Iterationen.
+\end{Korollar}
+\section{Approximative Darstellung reeller Zahlen}
+\subsection{$b$-adische Darstellung reeller Zahlen}
+\begin{Satz} Sei $b\in \N, b\geq 2.$ Sei $x\in \R\setminus\{0\}.$ Dann existieren eindeutig bestimmte Zahlen $E\in \Z, \sigma \in \{-1;1\}, z_i\in \{0,1,\ldots,b-1\}$ für $i \in \N\cup\{0\}$ mit $\{i\in \N: z_i\neq b-1\}$ unendlich, $z_0\neq 0$ und
+\begin{equation}
+ x=\sigma \cdot b^E\cdot\left(\sum_{i=0}^{\infty}{z_ib^{-i}}\right) 
+\end{equation}\label{badisch}
+\eqref{badisch} heißt die (normalisierte) \herv{b-adische Darstellung} von x.
+\end{Satz}
+\subsection{Maschinenzahlen}
+\begin{Definition}
+Seien $b,m \in \N, b\geq 2$. Eine b-adische m-stellige \herv{normalisierte Gleitkommazahl} hat die Form \[
+ x=\sigma \cdot b^E\cdot\left(\sum_{i=0}^{m}{z_ib^{-i}}\right) \]
+mit dem Vorzeichen $\sigma$, der Mantisse $\sum_{i=0}^{m}{z_ib^{-i}}$ mit $z_0\neq 0, z_i\in\{0,\ldots,b-1\}$, für $i=0,\ldots,m$ sowie dem Exponenten E.
+\end{Definition}
+Für die Darstellung am Computer müssen wir $b,m$ und den zulässigen Bereich für den Exponenten $E\in \{E_{\text{min}},\ldots,E_{\text{max}}\}$ festlegen.\\
+Das bestimmt den \textbf{Maschinenzahlbereich} $F(b,m,E_{\text{min}},E_{\text{max}})$, das ist die Menge der $b$-adi\-schen $m$-stelligen normalisierten Gleitkommazahlen mit Exponent $E\in \{E_{\text{min}},\ldots,E_{\text{max}}\}$ zu\-züg\-lich der Zahl 0.\\
+IEEE-Standard 754: \texttt{double}: $b=2, m=52, E\in\{-1022,\ldots,1023\}.$ $ F_{\mathtt{double}}:=F(2,52,-1022,$ $1023)$. $z_0=1$ muss nicht gespeichert werden (hidden Bit). Die freien Exponenten werden genutzt, um z.B. $0, \pm\infty , NaN$ zu speichern. Für den Exponenten E wird die sogenannte \textbf{Bias-Darstellung} verwendet, wodurch zum Exponenten der feste Betrag 1023 hinzuaddiert wird, um alle abgespeicherten Exponenten positiv zu machen.\\
+$\max F_{\mathtt{double}}=$\texttt{std::numeric\_limits<double>::max()}=$(2-2^{-52})\cdot 2^{1023}\approx 1,79\cdot 10^{308}$\\
+$\min \{ f\in F_{\mathtt{double}},f>0\}=$\texttt{std::numeric\_limits<double>::min()}=$(2^{-1022}\approx 2,23\cdot 10^{-308}$\\
+range($F$)=$\left[\min\{f\in F: f>0 \},\max F \right]$
+\subsection{Rundung}
+\begin{Definition} Sei $F=F(b,m,E_{\text{min}},E_{\text{max}})$ ein Maschinenzahlbereich. Eine \herv{Rundung} (zu F) ist eine Funktion $rd: \R \rightarrow F$, wenn für alle $x \in \R$ gilt: $|x-rd(x)|=\min_{a\in F} |x-a|$.
+\end{Definition}
+\begin{Definition}
+Seien $x, \tilde x \in \R$ (wobei $\tilde x$ eine Näherung von x sein soll). Dann heißt $|x-\tilde x|$ der \herv{absolute Fehler} und, falls $x\neq 0$, $\left|\frac{x-\tilde x}{x}\right|$ der \herv{relative Fehler}.
+\end{Definition}
+\begin{Definition} Sei $F$ ein Maschinenzahlbereich. Die \herv{Maschinengenauigkeit} $eps(F)$ von $F$ ist definiert durch $eps(F):=sup\left\lbrace \left|\frac{x-rd(x)}{x}\right|: |x|\in range(F), rd \text{ Rundung zu }F\right\rbrace$.
+\end{Definition}
+\begin{Satz}
+Für jeden Maschinenzahlbereich $F=F(b,m,E_{\text{min}},E_{\text{max}})$ gilt: $eps(F)=\frac{1}{1+2\cdot b^m}$.
+\end{Satz}
+$eps(F_{\texttt{double}})=\frac{1}{1+2^{53}}\approx 1,11\cdot 10^{-16}$ \\
+\texttt{std::numeric\_limits<double>::epsilon()} liefert die kleinste darstellbare Zahl, die zu 1 ohne Rundungsfehler addiert werden kann.
+\begin{Definition}
+Sei F ein Maschinenzahlbereich und $s\in \N$. Eine Maschinenzahl $f \in F$ hat (mindestens) s \herv{signifikante Stellen} in der b-adischen Gleitkommadarstellung, falls $f \neq 0$ und für jede Rundung rd und jede Zahl $x\in \R$ mit $rd(x)=f$ gilt: $\left| x- f \right|\leq \frac{1}{2} b^{\lfloor\log_b\left| f\right|\rfloor +1 -s }$
+\end{Definition}
+Jedes $f\in F_{\mathtt{double}}$ hat mindestens 15 signifikante Stellen.\\
+\texttt{\#include<iomanip>}\\
+\texttt{std::cout<<std::setprecision(15);} für 15 signifikante Stellen bei der Ausgabe in C++
+\subsection{Maschinenzahlarithmetik}
+Statt $+,-,\cdot,/$ werden Ersatzoperationen $\oplus,\ominus,\odot,\oslash$ durchgeführt, mit der \textbf{Annahme}\\
+$x\circledcirc y=rd(x\circ y)$ für $\circ\in\{+,-,\cdot,/\}$ und $x,y\in F$, für eine Rundung $rd$ zu $F$.\\
+Für $\oplus, \odot$ gilt das Kommutativgesetz. Assoziativität und Distributivität gelten nicht.
+\section{Rechnen mit Fehlern}
+Fehlerarten:
+\begin{itemize}
+\item Datenfehler
+\begin{itemize}
+\item nicht darstellbare Eingaben
+\item Messfehler
+\end{itemize}
+\item Rundungsfehler
+\item \glqq Verfahrensfehler\grqq: bspw. Ausgabe wird nur approximiert, eventuell nicht darstellbar.
+\end{itemize}
+\subsection{Binäre Suche}
+\begin{Beispiel}[Binäre Suche für $\sqrt{3}$]
+Bezeichne $\left[l_i;u_i\right]$ das Intervall der Iteration $i$ und $m_i$ der Mittelpunkt, so wissen wir \textbf{a priori}, dass $\left| m_i-\sqrt{3}\right|\leq\frac{1}{2}\left|u_i-l_i\right|\leq 2^{-i|U-L|}$. Im Nachhinein (\textbf{a posteriori}) kann man oft bessere Schranken angeben: \[|m_i-\sqrt{3}|=\frac{|m_i^2-3|}{m_i+\sqrt{3}}\leq \frac{|m_i^2-3|}{m_i+l_i}\].
+\end{Beispiel}
+\begin{Algorithmus}[Binäre Suche, diskret]\\
+\textbf{Eingabe:} Ein \textbf{Orakel} zur Berechnung einer monoton wachsenden Funktion $f:\Z\rightarrow\R$. \\ $L,U \in \Z$ mit $L\leq U$ und $y\in \R$ mit $y\geq f(L)$\\
+\textbf{Ausgabe:} Das maximale $n\in\{L,\ldots,U\}$ mit $f(n)\leq y$\\
+$l\leftarrow L$\\
+$u\leftarrow U+1$\\
+\textbf{while} $u>l+1$ \textbf{do:}\\
+\text{\qquad}$m\leftarrow\left\lfloor\frac{l+u}{2}\right\rfloor$ \\
+\text{\qquad}\textbf{if} $f(m)>y$ \textbf{then} $u\leftarrow m$ \textbf{else} $l\leftarrow m$\\
+\textbf{output} $l$
+\end{Algorithmus}
+\begin{Satz}
+Der angegebene Algorithmus für die diskrete Binäre Suche arbeitet korrekt und terminiert nach $O(\log(U-L+2)$ Iterationen.
+\end{Satz}
+\subsection{Fehlerfortpflanzung}
+\begin{Lemma}
+Seien $x,y \in \R\setminus\{0\}$ und $\tilde x, \tilde y$ Näherungen mit $\varepsilon_x:=\frac{x-\tilde x}{x}; \varepsilon_y:=\frac{y-\tilde y}{y}$. Dann gilt für $\varepsilon_{\circ}:=\frac{x\circ y-\left(\tilde x \circ \tilde y\right)}{x\circ y}$ mit $\circ \in \{+,-,\cdot,/\}$:
+\begin{align*}
+\varepsilon_+&=\varepsilon_x\cdot\frac{x}{x+y}+\varepsilon_y\cdot\frac{y}{x+y} \\
+\varepsilon_-&=\varepsilon_x\cdot\frac{x}{x-y}-\varepsilon_y\cdot\frac{y}{x-y} \\
+\varepsilon_{\cdot}&=\varepsilon_x+\varepsilon_y-\varepsilon_x\cdot \varepsilon_y \\
+\varepsilon_/&=\frac{\varepsilon_x-\varepsilon_y}{1-\varepsilon_y}
+\end{align*}
+\end{Lemma}
+\subsection{Kondition}
+\begin{Definition}
+Sei $P\subseteq D\times E$ ein numerisches Berechungsproblem mit $D,E \subseteq \R$. Sei $d\in D$ (eine Instanz von P) mit $d\neq 0$. Dann ist die \herv{(relative) Kondition} von d, oft $\kappa(d)$ genannt, definiert als
+\[ \lim_{\varepsilon \rightarrow 0}\ \sup \left\lbrace\inf \left\lbrace \frac{\left|\frac{e-e'}{e}\right|}{\left|\frac{d-d'}{d}\right|}:e\in E:(d,e)\in P \right\rbrace : d'\in D, e\in E, (d',e')\in P, 0<|d-d'|<\varepsilon \right\rbrace ,
+\]
+wobei $\frac{0}{0}:=0$.\\
+Bezeichnet $\kappa(d)$ die relative Kondition von d, so ist $\sup \{\kappa(d):d\in D, d\neq 0\}$ die (rel.) Kondition von P.\\
+Analog: \herv{absolute Kondition} mit Betrachtung der absoluten Fehler.
+\end{Definition}
+\begin{Satz}
+Sei $f: D\rightarrow E$ ein eindeutiges numerisches Berechnungsproblem mit $D,E \subseteq \R$, und sei $d\in D, d\neq 0$ und $f(d)\neq 0$. Dann ist ihre Kondition gleich:
+\[ \frac{|d|}{|f(d)|}\cdot \lim_{\varepsilon \rightarrow 0}\ \sup \left\lbrace\frac{|f(d)-f(d')|}{|d-d'|},d' \in D, |d-d'|<\varepsilon \right\rbrace
+\]
+\end{Satz}
+\begin{Korollar}
+Sei $f:D \rightarrow E$ ein eindeutiges numerisches Berechnungsproblem, wobei $D,E\subseteq \R$ und f differenzierbar ist. Dann ist die Kondition einer Instanz $d\in D$ mit $d\neq 0$ und $f(d)\neq 0$ gleich\\
+\[
+\frac{|f'(d)|\cdot |d|}{|f(d)|}
+\]
+\end{Korollar}
+Ideal ist es, wenn die Kondition $\leq$ 1 ist. Dann spricht man von einem \glqq gut konditioniertem Problem\grqq.
+\subsection{Fehleranalyse}
+Ein Algorithmus heißt \textbf{numerisch stabil}, wenn jeder seiner Rechenschritte gut konditioniert ist.
+\begin{itemize}
+\item Bei der \textbf{Vorwärtsanalyse} untersucht man, wie sich der relative Fehler im Laufe einer Rechnung akkumuliert.
+\begin{itemize}
+\item$x \oplus y = rd(x+y)=(x+y)(1+\varepsilon)$ mit $|\varepsilon|\leq eps(F)$
+\end{itemize}
+\item Bei der \textbf{Rückwärtsanalyse} wird jedes Zwischenergebnis als exaktes Ergebnis für gestörte Daten interpretiert, und es wird abgeschätzt, wie groß die Eingangsdatenstörung sein müsste, damit das berechnete Ergebnis korrekt wäre.
+\begin{itemize}
+\item $x\oplus y=(1+\varepsilon)x+(1+\varepsilon)y=\tilde{x}+\tilde{y}$ für $|\varepsilon|\leq eps(F)$
+\end{itemize}
+\end{itemize}
+\subsection{Intervallarithmetik}
+Statt mit Zahlen wird mit Intervallen gerechnet. Schon eine Eingabe $x$ kann durch ein Intervall $\left[rd^-(\min\{y\in\R:rd(y)=x\}),rd^+(\max\{y\in\R:rd(y)=x\})\right]$ ersetzt werden, die die gewünschte Eingabe enthält. Dabei bezeichnen $rd^-$ und $rd^+$ die Ab- bzw. Aufrundung zur nächsten kleinsten bzw. größten Maschinenzahl.\\ Damit kann man dann rechnen: $\left[a_1, b_1\right] \oplus \left[a_2,b_2\right]=\left[rd^-(a_1+a_2),rd^+(b_1+b_2)\right]$.
+\subsection{Newton-Verfahren}
+Gesucht: Nullstelle einer differenzierbaren Funktion $f: \R \rightarrow \R$.\\
+\glqq Rate\grqq\ Startwert $x_0$. \\
+Setze iterativ $x_{n+1}\leftarrow x_n-\frac{f(x_n)}{f'(x_n)}$.\\
+Konvergiert unter bestimmten Voraussetzungen.
+\begin{Beispiel}[Babylonisches Wurzelziehen]
+Wir suchen die positive Nullstelle der Funktion $f(x)=x^2-a$.
+\begin{eqnarray}\label{Babylon}
+x_{n+1}\leftarrow x_n-\frac{x_n^2-a}{2x_n}=\frac{1}{2}\left(x_n+\frac{a}{x_n}\right) 
+\end{eqnarray}
+z.B. mit Startwert $x_0=1$
+\end{Beispiel} 
+\begin{Definition}
+Sei $(x_n)_{n\in\N}$ eine konvergente Folge und $x^*:=\lim_{n\rightarrow \infty} x_n$.\\
+\begin{itemize}
+\item Existiert eine Konstante $c<1$, so dass 
+\[ |x_{n+1}-x^*|\leq c|x_n-x^*| \quad \forall n\in \N,\]
+so hat die Folge (mindestens) \herv{Konvergenzordnung} 1 (konvergiert linear). Ein Beispiel ist die Binäre Suche mit $c=\frac{1}{2}$.
+\item Sei $p>1$. Existiert eine Konstante $c\in \R$, so dass 
+\[ |x_{n+1}-x^*|\leq c|x_n-x^*|^p \quad \forall n\in \N,\]
+so hat die Folge (mindestens) Konvergenzordnung $p$ ($p=2$: konvergiert quadratisch)
+\end{itemize}
+\end{Definition}
+\begin{Satz}
+Sei $a\geq 1, x_0\geq 1$. Für die in \eqref{Babylon} definierte Folge $(x_n)_{n\in\N}$ gilt:
+\renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
+\begin{itemize}
+\item $x_1\geq x_2\geq \ldots\geq\sqrt{a}$
+\item Die Folge konvergiert quadratisch gegen $\lim_{n\rightarrow \infty} x_n = \sqrt{a}$, genauer gilt: $\forall n\geq 0$\\ $x_{n+1}-\sqrt{a}\leq\frac{1}{2}\left(x_n-\sqrt{a}\right)^2$
+\item $\forall n\geq 1$ gilt: $x_n-\sqrt{a}\leq x_n-\frac{a}{x_n}\leq 2\left(x_n-\sqrt{a}\right)$
+\end{itemize}
+\end{Satz}
+\section{Graphen}
+\begin{Definition}
+Ein \herv{ungerichteter Graph} ist ein Tripel $(V,E,\Psi)$, wobei V und E endliche Mengen sind, $V\neq\emptyset$, und $\Psi:E\rightarrow\{X\subseteq V:|X|=2\}$.\\
+Ein \herv{gerichteter Graph} ist ein Tripel $(V,E,\Psi)$, wobei V und E endliche Mengen sind, $V\neq \emptyset$ und $\Psi: E\rightarrow\{(v,w)\in V\times V: v\neq v\}$.\\
+Ein Graph ist ein gerichteter Graph (oder auch \herv{Digraph}) oder ein ungerichteter Graph. \\
+Die Elemente von V heißen \herv{Knoten} und die Elemente von E \herv{Kanten}. \\
+Zwei Kanten $e\neq e'$ mit $\Psi(e)=\Psi(e')$ heißen parallel. Graphen ohne parallele Kanten heißen einfach. In einfachen zusammenhängenden Graphen kann man jede Kante e mit $\Psi(e)$ identifizieren. Man schreibt $G=(V(G),E(G))$, wobei \\
+$E(G)\subseteq\{\{v,w\}:v,w\in V(G), v\neq w\}$ bzw. $E(G)\subseteq\{(v,w):v,w\in V(G),v\neq w \}$\\
+$\Psi(e)=\{v,w\}$ oder $\Psi(e)=(v,w)$. Man sagt e \herv{verbindet} v und w, e \herv{geht von} v \herv{nach} w, e ist mit v und w \herv{inzident}, v und w sind \herv{Nachbarn (adjazent)}, v und w sind die \herv{Endknoten von} e.
+\end{Definition}
+\begin{Definition}
+Sei G ein gerichteter Graph und $X\subseteq V(G)$. Dann sei 
+\[ \delta(X):=\{e=\{x,y\}\in E(G): x\in X, y \in V(G)\setminus X\} \]
+Die \herv{Nachbarschaft} von X ist die Menge
+\[ \Gamma(X):=\{v\in V(G)\setminus X: \delta(X) \cap \delta(\{v\})\neq \emptyset \} \]
+Sei G ein Digraph und $X\subseteq V(G)$. Dann sei
+\[ \delta^+(X):=\{e=(x,y)\in E(G): x\in X, y \in V(G)\setminus X\}, \]
+\[ \delta^-(X):=\delta^+(V(G)\setminus X)\text{ und } \delta(X):=\delta^+(X)\cup \delta^-(X). \]
+Für $x \in V(G)$ schreiben wir $\delta(x):=\delta(\{x\})$ usw. Der \herv{Grad} eines Knotens v ist $|\delta(v)|$, d.h. die Anzahl der mit v inzidenten Knoten. Im gerichteten Fall unterscheidet man noch zwischen \herv{Eingangsgrad} $|\delta^-(v)|$ und \herv{Ausgangsgrad} $|\delta^+(v)|$.
+\end{Definition}
+\begin{Satz}
+Für jeden Graph G gilt $\sum_{v\in V(G)}{|\delta(v)|}=2|E(G)|$.
+\end{Satz}
+\begin{Satz}
+Für jeden Digraphen G gilt $\sum_{v\in V(G)}{|\delta^-(v)|}=\sum_{v\in V(G)}{|\delta^+(v)|}$.
+\end{Satz}
+\begin{Korollar}
+In jedem Graphen ist die Anzahl der Knoten mit ungeradem Grad gerade.
+\end{Korollar}
+\begin{Definition}
+Ein Graph H ist ein \herv{Teilgraph (=Subgraph=Untergraph)} des Graphen G, wenn $V(H)\subseteq V(G)$ und $E(H)\subseteq E(G)$ (und auch $\Psi$ auf den Kanten in H übereinstimmt). Falls $V(H)=V(G)$, so heißt H \herv{aufspannender Teilgraph}. H heißt \herv{induzierter Teilgraph}, wenn $E(H)=\{\{x,y\}\in E(G):x,y\in V(H)\}$ bzw. $E(H)=\{(x,y)\in E(G):x,y\in V(H)\}$. Man nennt H auch den von V(H) induzierten Teilgraphen und schreibt H=$G\left[V(H)\right]$\\
+Weiterhin definiere $G-v := G\left[V(G)\setminus \{v\}\right]$ und $G-e:= G(V(G),E(G)\setminus \{e\})$.
+\end{Definition}
+\subsection{Wege und Kreise}
+\begin{Definition}
+Ein Kantenzug (von $x_1$ nach $x_{k+1}$) in einem Graphen G ist eine Folge $x_1, e_1,\\ x_2, e_2, \ldots, x_k, e_k, x_{k+1}$ mit $k\in \N\cup\{0\}$ und $e_i=(x_i,x_{i+i})\in E(G)$ bzw. $e_i=\{x_i,x_{i+i}\}\in E(G)$ für $i=1,\ldots,k$. Falls $x_1=x_{k+1}$, so handelt es sich um einen \herv{geschlossenen Kantenzug}. Ein \herv{Weg} ist ein Graph $P=(\{x_1,\ldots,x_{k+1}\},\{e_1,\ldots,e_k\})$, so dass $x_i\leq x_j$ für $1\leq i \leq j\leq k+1$ und $x_1,e_1,x_2,e_2,\ldots,e_k,x_{k+1}$ ist ein Kantenzug. P heißt auch \herv{$x_1-x_{k+1}-$Weg} oder \herv{Weg von} $x_1$ \herv{nach} $x_{k+1}$. $x_1$ und $x_{k+1}$ heißen \herv{Endknoten} von P, die anderen Knoten \herv{innere Knoten} von P. Ein \herv{Kreis} ist ein Graph $C=(\{x_1,\ldots,x_k\},\{e_1,\ldots,e_k\})$ mit $k\geq 2, x_i\neq x_j$ und $e_i\neq e_j$ für $1\leq i\leq j\leq k$ und $x_1,e_1,x_2,e_2,\ldots,x_k,e_k,x_1$ ist ein geschlossener Kantenzug. Die \herv{Länge} eines Weges oder Kreises ist die Anzahl seiner Kanten. Ist ein Weg oder Kreis Teilgraph von G, so sprechen wir auch von einem \herv{Weg} oder \herv{Kreis in} G. In einem Graph G heißt ein Knoten y von einem Knoten x aus \herv{erreichbar}, wenn es einen x-y-Weg gibt.
+\end{Definition}
+\begin{Lemma}
+Sei G ein Graph, $x,y\in V(G)$. Es gibt genau dann einen x-y-Weg in G, wenn es einen Kantenzug von x nach y gibt.
+\end{Lemma}
+\glqq Erreichbarkeit\grqq ist eine transitive Relation auf $V(G)$. Im ungerichteten Fall ist dies eine Äqui\-va\-lenz\-re\-la\-tion.\\
+Zwei Graphen heißen \textbf{knoten- bzw. kantendisjunkt}, wenn sie keine Knoten bzw. Kanten gemeinsam haben.
+\begin{Lemma}
+Sei G ein ungerichteter Graph mit $|\delta(V)|$ gerade $\forall v \in V(G)$ oder ein gerichteter Graph mit $|\delta^-(v)|=|\delta^+(v)|\ \forall v\in V(G)$. Dann existiert ein $k\geq 0$ und paarweise kantendisjunkte Kreise $C_1,\ldots,C_k$, sodass $E(G)=E(C_1)\cup \ldots \cup E(C_k)$.
+\end{Lemma}
+Für zwei Mengen $A$ und $B$ sei $A \bigtriangleup B := (A\setminus B)\cup (B\setminus A)=(A\cup B)\setminus(A\cap B)$ die \textbf{symmetrische Differenz} von $A$ und $B$. Mit $A \mathbin{\dot{\cup}} B$ bezeichnen wir die disjunkte Vereinigung, in der Elemente aus $A \bigtriangleup B$ einfach und Elemente aus $A\cap B$ doppelt vorkommen.
+\begin{Lemma}
+Sei G ein Graph, und seien P ein s-t-Weg in G und Q ein t-s-Weg mit $P\neq Q$. Dann enthält $(V(P)\cup V(Q),E(P)\cup E(Q))$ einen Kreis.
+\end{Lemma}
+\subsection{Zusammenhang und Bäume}
+Sei $\mathcal{F}$ eine Familie von Mengen bzw. Graphen. Dann heißt $F\in \mathcal{F}$ \textbf{inklusionsminimal} bzw. \textbf{minimal}, falls keine echte Teilmenge bzw. kein echter Teilgraph von $F$ in $\mathcal{F}$ ist. $F\in \mathcal{F}$ heißt \textbf{inklusionsmaximal} bzw. \textbf{maximal} falls $F$ keine echte Teilmenge bzw. kein echter Teilgraph eines Elementes von $\mathcal{F}$ ist.
+\begin{Definition}
+Sei G ein ungerichteter Graph. G heißt \herv{zusammenhängend}, falls es für je zwei Knoten $x,y\in V(G)$ einen x-y-Weg gibt, sonst heißt G \herv{unzusammenhängend}. Die maximalen zusammenhängenden Teilgraphen von G sind die \herv{Zusammenhangskomponenten} von G. Ein Knoten heißt \herv{Artikulationsknoten} von G, wenn er nicht der einzige Knoten von G ist und $G-v$ mehr Zusammenhangskomponenten hat als G. Eine Kante heißt \herv{Brücke}, wenn $G-e$ mehr Zusammenhangskomponenten hat als G.
+\end{Definition}
+\begin{Satz}
+Ein ungerichteter Graph G ist genau dann zusammenhängend, wenn $\delta(X)\neq \emptyset$ für alle $\emptyset \subset X \subset V(G)$.
+\end{Satz}
+\begin{Bemerkung}
+Man kann also Zusammenhang testen, indem man für alle $\emptyset \subset X \subset V(G)$ testet, ob $\delta(X)\neq \emptyset$ ist. Dies sind aber $2^{|V(G)|}-2$ Mengen. $\Rightarrow$ zu langsam!
+\end{Bemerkung}
+\begin{Definition}
+Ein ungerichteter Graph heißt \herv{Wald}, wenn er keine Kreise enthält. Ein \herv{Baum} ist ein zusammenhängender Wald. Ein Knoten vom Grad 1 in einem Baum heißt \herv{Blatt}.
+\end{Definition}
+\begin{Satz}
+Jeder Baum mit mindestens zwei Knoten hat mindestens zwei Blätter.
+\end{Satz}
+\begin{Lemma}
+Sei G ein Wald mit n Knoten, m Kanten und p Zusammenhangskomponenten. Dann ist $n=m+p$.
+\end{Lemma}
+\begin{Satz}
+Sei G ein ungerichteter Graph aus n Knoten. Dann sind folgende Aussagen äquivalent:
+\renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
+\begin{enumerate}
+\item G ist ein Baum.
+\item G hat n-1 Kanten und enthält keinen Kreis.
+\item G hat n-1 Kanten und ist zusammenhängend.
+\item G ist ein minimaler zusammenhängender Graph mit Knotenmenge $V(G)$. (Das heißt G ist zusammenhängend und jede Kante ist eine Brücke.)
+\item G ist ein minimaler Graph mit Knotenmenge $V(G)$ und $\delta(X)\neq \emptyset\ \forall \emptyset\subset X\subset V(G)$.
+\item G ist ein maximaler Wald mit Knotenmenge $V(G)$.
+\item Je zwei Knoten in G sind durch genau einen Weg in G verbunden.
+\end{enumerate}
+\end{Satz}
+\begin{Korollar}
+Ein ungerichteter Graph ist genau dann zusammenhängend, wenn er einen aufspannenden Baum enthält.
+\end{Korollar}
+\subsection{Starker Zusammenhang und Aboreszenzen}
+\begin{Definition}
+Für einen Digraphen G ist der \herv{zugrunde liegende zusammenhängende Graph $G'$}, der Graph auf der Knotenmenge $V(G)$, der für jede Kante $(v,w)$ eine Kante $\{v,w\}$ enthält. G heißt auch eine \herv{Orientierung} von $G'$. Ein Digraph G heißt \herv{(schwach) zusammenhängend}, wenn der zugrunde liegende ungerichtete Graph zusammenhängend ist. G heißt \herv{stark zusammenhängend}, wenn es für alle $s,t\in V(G)$ einen s-t-Weg und einen t-s-Weg gibt. Die \herv{starken Zusammenhangskomponenten} eines Digraphen sind seine maximalen stark zusammenhängenden Teilgraphen.
+\end{Definition}
+\begin{Satz}
+Sei G ein Digraph, $r\in V(G)$. Dann gibt es für jedes $v\in V(G)$ einen r-v-Weg genau dann, wenn $\delta^+(X)\neq \emptyset$ für alle $X\subset V(G)$ mit $r\in X$.
+\end{Satz}
+\begin{Definition}
+Ein Digraph G ist ein \herv{Branching}, falls der zugrunde liegende ungerichtete Graph ein Wald ist und $|\delta^-(v)|\leq 1\ \forall v\in V(G)$. Ein zusammenhängendes Branching ist eine \herv{Aboreszenz}. Eine Aboreszenz auf n Knoten hat n-1 Kanten, somit gibt es genau einen Knoten mit $\delta^-(r)=\emptyset$, die \herv{Wurzel}. Ist $(v,w)\in E(G)$, so heißt w \herv{Kind} von v (und v \herv{Vorgänger} von w).
+\end{Definition}
+\begin{Satz}
+Sei G ein Digraph mit n Kanten und $r\in V(G)$. Dann sind die folgenden Aussagen äquivalent:
+\renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
+\begin{enumerate}
+\item G ist eine Aboreszenz mit Wurzel r (d.h. zusammenhängendes Branching mit $\delta^-(r)=\emptyset$).
+\item G ist ein Branching mit n-1 Kanten und $\delta^-(r)=\emptyset$.
+\item G hat n-1 Kanten und jeder Knoten ist von r aus erreichbar.
+\item Jeder Knoten ist von r aus erreichbar und das Entfernen eines beliebigen Knotens zerstört diese Eigenschaft.
+\item $\delta^+(X)\neq\emptyset\ \forall X\subset V(G)$ mit $r\in X$ und das Entfernen einer beliebigen Kante zerstört diese Eigenschaft.
+\item $\delta^-(r)=\emptyset$ und für jedes $v\in V(G)\setminus \{r\}$ existiert ein eindeutiger Kantenzug von r nach v.
+\item $\delta^-(r)=\emptyset$, $|\delta^-(v)|=1\ \forall v\in V(G)\setminus\{r\}$ und G enthält keinen Kreis (ist kreisfrei).
+\end{enumerate}
+\end{Satz}
+\begin{Korollar}
+Ein Digraph ist genau dann stark zusammenhängend, wenn er für jedes $v\in V(G)$ eine Aboreszenz mit Wurzel v enthält.
+\end{Korollar}
+\subsection{Darstellungen von Graphen}
+\begin{Definition}
+Sei $G=(V,E,\Psi)$ ein Graph mit n Knoten und m Kanten. Die Matrix $A=(a_{x,y})_{x,y\in V}\in \Z^{n\times n}$ heißt \herv{Adjazenzmatrix} von G, wenn \\
+$a_{x,y}=|\{e\in E(G): \Psi(e)=\{x,y\}\text{ bzw. }\Psi(e)=(x,y)\}|$.\\
+$A=(a_{x,e})_{x\in V, e\in E}\in \Z^{n\times m}$ heißt \herv{Inzidenzmatrix} von G , wenn \[a_{x,e}=\left\lbrace\begin{array}{ll}
+1 & \text{wenn x Endknoten von e,} \\
+0 & \text{sonst},
+\end{array} \right.\]
+wenn G ungerichtet,\\
+bzw. wenn \[a_{x,e}=\left\lbrace\begin{array}{ll}
+-1 & \text{wenn e in x beginnt,} \\
+1 & \text{wenn e in x endet}\\
+0 & \text{sonst},
+\end{array} \right.\]
+wenn G gerichtet.
+\end{Definition} 
+Sei $\mathcal{G}$ die Menge aller Graphen, $f:\mathcal{G} \rightarrow \R_{\geq 0}$ und $g:\mathcal{G}\rightarrow \R_{\geq 0}$. Wir sagen: $f=O(g)$, wenn $\alpha > 0$ und $n_0\in \N$ existieren, sodass $\forall G\in \mathcal{G}$ mit $|V(G)|\geq n_0$ gilt $f(G)\leq \alpha\cdot g(G)$. Analog für $\Omega$ und $\Theta$.
+$f$ misst Laufzeit/Speicherbedarf. $g$ hängt nur von der Anzahl der Knoten ($n$) und Kanten ($m$) ab.\\
+Beispielsweise ist der Speicherbedarf der Adjazenzmatrix $\Omega(n^2)$ und der der Inzidenzmatrix ist $\Theta(m\cdot n)$. Für große Graphen mit $\Theta(n)$ Kanten ist das zuviel.\\
+\textbf{Adjazenzlistendarstellung:}speichere für jeden Knoten eine Liste der inzidenten Kanten.\\
+\begin{minipage}{0.33\textwidth}
+\vspace*{0.1cm}
+\fbox{$\delta^+(1)$} $\rightarrow$ \fbox{$c$} $\rightarrow \blacksquare$\\
+\fbox{$\delta^+(2)$} $\rightarrow$ \fbox{$a$} $\rightarrow \blacksquare$ \\
+\fbox{$\delta^+(3)$} $\rightarrow$ \fbox{$b$} $\rightarrow$ \fbox{$d$} $\rightarrow$ \fbox{$e$} $\rightarrow \blacksquare$ \\
+\fbox{$\delta^+(4)$} $\rightarrow \blacksquare$
+\vspace*{0.1cm}
+\end{minipage}
+\hspace*{1cm}
+\begin{minipage}{0.25\textwidth}
+\vspace*{0.1cm}
+\fbox{$\delta^-(1)$} $\rightarrow$ \fbox{$a$} $\rightarrow \blacksquare$\\
+\fbox{$\delta^-(2)$} $\rightarrow$ \fbox{$e$} $\rightarrow$ \fbox{$b$} $\rightarrow \blacksquare$ \\
+\fbox{$\delta^-(3)$} $\rightarrow$ \fbox{$c$} $\rightarrow \blacksquare$ \\
+\fbox{$\delta^-(4)$} $\rightarrow$ \fbox{$d$} $\rightarrow \blacksquare$
+\vspace*{0.1cm}
+\end{minipage}
+\hspace*{1cm}
+\begin{minipage}{0.2\textwidth}
+\vspace*{0.1cm}
+\fbox{$a$}=$(2,1)$\\
+\fbox{$b$}=$(3,2)$\\
+\fbox{$c$}=$(1,3)$\\
+\fbox{$d$}=$(3,4)$\\
+\fbox{$e$}=$(3,2)$
+\vspace*{0.1cm}
+\end{minipage}\\
+Speicherbedarf: $O(n+m)$ mit der \textbf{Annahme}, dass Speicherplatz für Knoten- und Kantenindizes in $O(1)$ und Zugriff bzw. Verfolgen eines next-Pointers in $O(1)$ Zeit.
+\section{Einfache Graphenalgorithmen}
+\subsection{Graphendurchmusterung}
+\begin{Algorithmus}[Graphendurchmusterung]\\
+\textbf{Eingabe:} ein Graph $G$, $r\in V(G)$\\
+\textbf{Ausgabe:} die Menge $R\subseteq V(G)$ der von $r$ aus erreichbaren Knoten und eine Menge $F\subseteq E(G)$, sodass $(R,F)$ eine Aboreszenz mit Wurzel $r$ bzw. ein Baum ist.\\
+$R\leftarrow \{r\}$\\
+$Q\leftarrow \{r\}$\\
+$f\leftarrow \emptyset$\\
+\textbf{while} $Q \neq \emptyset$ \textbf{do:}\\
+\text{\qquad} Wähle $v\in Q$\\
+\text{\qquad} \textbf{if} $\exists e=(v,w)\in \delta^+_G(v)$ bzw. $e=\{v,w\}\in \delta_G(v)$ mit $w \not\in R$\\
+\text{\qquad} \textbf{then} $R\leftarrow R\cup \{w\}$, $Q\leftarrow Q\cup \{w\}$, $F\leftarrow F\cup\{e\}$\\
+\text{\qquad} \textbf{else} $Q\leftarrow Q\setminus\{r\}$\\
+\textbf{output} $(R,F)$\\
+kann in linearer Laufzeit $O(m+n)$ implementiert werden, wobei $n=|V(G)|$ und $m=|E(G)|$. 
+\end{Algorithmus}
+\begin{Korollar}
+Die Zusammenhangskomponenten eines ungerichteten Graphen G können in linearer Zeit $O(n+m)$ bestimmt werden.
+\end{Korollar}
+Wichtige Variaten:
+\begin{itemize}
+\item \textbf{DFS} = Depth-First-Search=Tiefensuche; $Q$=\textbf{Stack}, \textbf{LIFO}= Last In, First Out
+\item \textbf{BFS} = Breadth-First-Search=Breitensuche; $Q$=\textbf{Queue}, \textbf{FIFO}= First In, First Out
+\end{itemize}
+\subsection{Breitensuche}
+Für zwei $v$ und $w$ in einem Graphen $G$ bezeichnet $\text{dist}(v,w)$ die Länge eines kürzesten Weges von $v$ nach $w$ ($v$-$w$-Weg) in $G$ (oder $\infty$, wenn kein $v$-$w$-Weg existiert); $\text{dist}(v,w)$ heißt auch \textbf{Abstand} von $v$ nach $w$.
+\begin{Satz}
+Jeder BFS-Baum enthält einen kürzesten Weg von einem Knoten r zu allen von r aus erreichbaren Knoten. Die Zahlen \emph{dist}$(r,v)$ $\forall v\in V(G)$ können in linearer Zeit $O(n+m)$ bestimmt werden.
+\end{Satz}
+\subsection{Bipartite Graphen}
+\begin{Definition}
+Eine \herv{Partition} einer Menge M ist eine Menge nichtleerer, paarweise disjunkter Teilmengen von M, deren Vereinigung M ist. Ein \herv{leerer Graph} ist ein Graph ohne Kanten. Ein \herv{vollständiger Graph} ist ein einfacher ungerichteter Graph, in dem je zwei Knoten durch eine Kante verbunden sind. Einen vollständigen Graphen auf n Knoten bezeichnet man oft als $K_n$.\\
+Die Knotenmengen der Zusammenhangskomponenten eines ungerichteten Graphen G bilden eine Partition von $V(G)$. Eine \herv{Bipartition} eines ungerichteten Graphen ist eine Partition $\{A,B\}$ der Knotenmenge $V(G)=A\cupdot B$, so dass $G\left[A\right]$ und $G\left[B \right]$ leere Graphen sind. Ein Graph heißt \herv{bipartit}, wenn er nur einen Knoten hat oder eine Bipartition. Oft schreiben wir für bipartite Graphen $G=(A\cupdot B, E(G))$ und meinen, dass $\{A,B\}$ eine Bipartition von G ist.\\
+Ein \herv{vollständiger bipartiter Graph} ist ein Graph G mit Bipartition $V(G)=A\cupdot B$ und Kantenmenge $E(G)=\{\{a,b\}: a\in A, b\in B\}$. Wir bezeichnen ihn oft mit $K_{|A|,|B|}$.\\
+Ein \herv{ungerader Kreis} ist ein Kreis ungerader Länge.
+\end{Definition}
+\begin{Satz}[König]
+Ein ungerichteter Graph ist genau dann bipartit, wenn er keinen ungeraden Kreis hat. In linearer Zeit kann man zu einem gegebenen ungerichteten Graphen mit mindestens zwei Knoten entweder eine Bipartition oder einen ungeraden Kreis finden.
+\end{Satz}
+\subsection{Azyklische Digraphen}
+\begin{Definition}
+Ein Digraph ist \herv{azyklisch}, wenn er keinen Kreis enthält. \\
+Sei G ein Digraph mit n Knoten. Eine \herv{topologische Ordnung} von G ist eine Ordnung der Knoten $V(G)=\{v_1,\ldots,v_n\}$, sodass $i<j$ für alle Kanten $(i,j)\in E(G)$ gilt.
+\end{Definition}
+\begin{Lemma}
+Ist G ein Digraph mit $\delta^+(v)\neq \emptyset\ \forall v \in V(G)$, so kann man in $(O(|V(G)|)$ Zeit einen Kreis in G finden. (irgendwo starten und Kanten entlang laufen, bis sich ein Knoten wiederholt.)
+\end{Lemma}
+\begin{Satz}
+Ein Digraph hat genau dann eine topologische Ordnung, wenn er azyklisch ist. Zu jedem Digraph kann man in linearer Zeit entweder eine topologische Ordnung oder einen Kreis finden.
+\end{Satz}
+\section{Sortieren}
+\subsection{Das allgemeine Sortierproblem}
+\begin{Definition}
+Sei S eine Menge. Eine Relation $R\subseteq S\times S$ heißt \herv{partielle Ordnung} (von S), wenn für alle $a,b,c\in S$ gilt:
+\begin{itemize}
+\item $(a,a)\in R$ (Reflexivität)
+\item $\left( (a,b)\in R \wedge (b,a) \in R \right) \Rightarrow a=b$ (Antisymmetrie)
+\item $\left( (a,b)\in R \wedge (b,c) \in R \right) \Rightarrow (a,c)\in R$ (Transitivität)
+\end{itemize}
+Statt $(a,b) \in R$ schreibt man oft $aRb$. Eine partielle Ordnung R ist eine \herv{totale Ordnung} (von S), wenn $(a,b)\in R \vee (b,a)\in R\ \forall a,b\in S$. Eine \herv{lineare Erweiterung} einer partiellen Ordnung R von S ist eine totale Ordnung T von S mit $R\subseteq T$.
+\end{Definition}
+Beispiele: \glqq$\leq$\grqq\ ist auf $\R$ eine totale Ordnung. \glqq$\subseteq$\grqq\ auf einer Mengenfamilie ist eine partielle, aber i.A. keine totale Ordnung. In einem gerichteten Graphen $G$ ist $R:=\{(v,w): \text{w ist von v aus erreichbar}\}$ genau dann eine partielle Ordnung, wenn $G$ azyklisch ist. Für eine endliche Menge $S$ kann man eine partielle Ordnung $\preceq$ durch Nummerierung der Elemente angegeben werden, d.h. durch eine Bijektion $f:S\rightarrow \{1,\ldots,n\}$ (wobei $f(s)=|\{x\in S: x\preceq s\}|$ für $s\in S$).
+\begin{Berechnungsproblem}[Allgemeines Sortierproblem]\\
+\textbf{Eingabe:} eine endliche Menge $S$ mit einer partiellen Ordnung $\preceq$ (durch Orakel gegeben)\\
+\textbf{Aufgabe:} Berechne eine Bijektion $f: S \rightarrow \{1,\ldots,n\}$ mit $f(j)\not\preceq f(i)$ für alle $1\leq i < j \leq n$.
+\end{Berechnungsproblem}
+Manchmal hat man mehr Informationen über $\preceq$ oder $\prec$ und kann diese für schnellere Algorithmen nutzen. Beispielsweise, wenn ein $g: S \rightarrow \{1,\ldots, k\}$ mit $a\prec b \Leftrightarrow g(a) < g(b)$ bekannt ist, kann man das Sortierproblem in $O(|S|+k)$ Zeit lösen.
+\subsection{Sortieren durch sukzessive Auswahl}
+\begin{Algorithmus}[Sortieren durch sukzessive Auswahl]\\
+\textbf{Eingabe und Ausgabe:} wie oben, $S=\{s_1,\ldots,s_n\}$\\
+\textbf{for} $i\leftarrow 1$ \textbf{to} $n$ \textbf{do} $f(i)\leftarrow s_i$\\
+\textbf{for} $i\leftarrow 1$ \textbf{to} $n$ \textbf{do}:\\
+\text{\qquad} \textbf{for} $j \leftarrow i$ \textbf{to} $n$ \textbf{do:}\\
+\text{\qquad \qquad} \textbf{if} $f(j)\preceq f(i)$ \textbf{then swap}$(f(i),f(j))$\\
+\textbf{output} f  \\
+Laufzeit: $O(n^2)$
+\end{Algorithmus}
+Für $0\leq k\leq n$ sei $\binom n k:=\frac{n!}{k!\cdot (n-k)!}$ (wobei $0!:=1$). Für eine endliche Menge $S$ und $0\leq k \leq |S|$ sei $\binom S k := \{A\subseteq S: |A|=k\}$. Es ist $\left|\binom S k \right| = \binom {|S|}{k}$. Der obige Algorithmus ruft $\binom n 2$ mal das Orakel auf (, wenn man die Aufrufe $(i,i)$ weglässt).
+\begin{Satz}
+Für jeden Algorithmus für das allgemeine Sortierproblem und jedes $n\in \N$ gibt es eine Eingabe $(S,\preceq)$ mit $|S|=n$, für die der Algorithmus mindestens $\binom n 2$ Orakelaufrufe braucht.
+\end{Satz}
+\subsection{Sortieren nach Schlüsseln}
+In vielen Anwendungen sortiert man nach \textbf{Schlüsseln}. Für jedes $s\in S$ hat man einen Schlüssel $k(s)\in K$, wobei K eine Menge mit einer totalen Ordnung ist (oft $\N$ oder $\R$ mit der gewohnten Ordnung). Eine partielle Ordnung $\leq$ auf $S$ ist dann durch $a\preceq b :\Leftrightarrow \\(a=b \vee K(a) < K(b)), (a,b\in S)$ gegeben. Eine so entstandene partielle Ordnung heißt \textbf{durch Schlüssel induziert}.
+\begin{Berechnungsproblem}[Sortieren mit Schlüsseln]\\
+\textbf{Eingabe:} endliche Menge $S$, $k: S \rightarrow K$ und eine totale Ordnung $\leq$ auf K\\
+\textbf{Aufgabe:} Berechne eine Bijektion $f:\{1,\ldots,n\} \rightarrow S$ mit $K(i)\leq K(j)\ \forall 1\leq i < j\leq n$ 
+\end{Berechnungsproblem}
+Variante: Wir kennen $k, K, \leq$ nur über ein Orakel für $\leq$ (wie im allgemeinen Sortierproblem), wissen aber nun, dass $\leq$ durch Schlüssel induziert ist.\\
+Bekannte Sortierverfahren für dieses Problem:
+\begin{itemize}
+\item Sortieren durch sukzessive Auswahl
+\item Insertion-Sort
+\item Bubble-Sort
+\end{itemize}
+Diese Verfahren brauchen $O(n^2)$ Vergleiche und diese Schranke ist scharf.
+\subsection{Merge-Sort}
+\begin{Algorithmus}[Merge-Sort]\\
+\textbf{Eingabe:} endliche Menge $S=\{s_1,\ldots,s_n\}$ eine durch Schlüssel induzierte partielle Ordnung $\leq$ (per Orakel)\\
+\textbf{Ausgabe:} Bijektion $f:\{1,\ldots,n\} \rightarrow S$ mit $f(j)\not\preceq f(i)\ \forall 1\leq i < j\leq n$.
+\begin{enumerate}
+\item Wenn $|S|$=1, ist nichts zu tun.
+\item Partitioniere $S$ in $S_1$ und $S_2$ mit $\left\lfloor\frac{n}{2}\right\rfloor$ bzw. $\left\lceil \frac{n}{2} \right\rceil$ Elementen.
+\item Sortiere $S_1$ und $S_2$ rekursiv mit Merge-Sort.
+\item Verschmelze (\glqq merge\grqq) die totalen Ordnungen von $S_1$ und $S_2$ zu einer totalen Ordnung von $S$. (Dies geht in $O(|S|)$ Zeit.)
+\end{enumerate}
+Laufzeit: $O(n \log n)$.
+\end{Algorithmus}
+\begin{Satz} 
+Selbst, wenn man die Eingabe auf total geordnete Mengen beschränkt, benötigt jeder Sortieralgorithmus, der Informationen über die Ordnung nur durch paarweises Vergleichen zweier Elemente (Orakel aufrufen) gewinnt, zum Sortieren einer n-elementigen Menge mindestens $\log_2(n!)$ Vergleiche.
+\end{Satz}
+Bemerkung: $n!\geq \left\lfloor\frac{n}{2}\right\rfloor^{\left\lceil\frac{n}{2}\right\rceil} \Rightarrow \log_2(n!)\geq \left\lceil\frac{n}{2}\right\rceil \log_2{\left\lfloor\frac{n}{2}\right\rfloor}=\Omega(n\log n)$
+\subsection{Quicksort}
+\begin{Algorithmus}[Quicksort]\\
+\textbf{Eingabe:} Eine Menge $S=\{s_1,\ldots,s_n\}$, eine durch Schlüssel induzierte partielle Ordnung $\preceq$ auf $S$ (per Orakel)\\
+\textbf{Ausgabe:} Eine Bijektion $f:\{1,\ldots,n\} \rightarrow S$ mit $f(j)\not\preceq f(i)\ \forall 1\leq i < j \leq n$.
+\begin{enumerate}
+\item Wenn $|S|=1$ ist, dann ist nichts zu tun.
+\item Wähle ein Element $x\in S$ und setze $S_1:=\{s\in S:s\preceq x\}\setminus \{x\}$, $S_2:=\{s\in S: x\preceq s\}\setminus\{x\}$ und $S_x:=S\setminus (S_1 \cup S_2)$.
+\item Sortiere $S_1$ und $S_2$ rekursiv (mit Quicksort).
+\item Füge die sortierten Listen $S_1,S_x,S_2$ aneinander.
+\end{enumerate}
+Laufzeit: $O(n^2)$
+\end{Algorithmus}
+\textbf{Random-Quicksort:} Wähle $x$ in Schritt 2 zufällig (unabhängig, gleichverteilt).
+\begin{Satz} Der Erwartungswert $\overline{T}(n)$ der Laufzeit von Random-Quicksort mit n Elementen ist $O(n \log n)$.
+\end{Satz}
+\subsection{Binäre Heaps und Heap-Sort}
+Eine \textbf{Prioritätswarteschlange} (priority queue) ist eine Datenstruktur, die mindestens folgende Operationen zur Verfügung stellt:
+\begin{itemize}
+\item \texttt{init}: Einrichten einer leeren Warteschlange (Konstruktur)
+\item \texttt{insert($s$,$k(s)$)}: füge Element $s$ mit Schlüssel $k(s)$ ein.
+\item s=\texttt{extract\_min}: finde ein Element mit minimalem Schlüssel und entferne es
+\item \texttt{clear} Löschen der Warteschlange (Destruktor)
+\end{itemize}
+Liste/Array/vector: \texttt{insert} in $O(1)$; \texttt{extract\_min} in $O(n)$ (bei $n$ Elementen)\\
+sortiertes Array/vector=sortierte Liste: \texttt{find} in $O(n \log n)$ mit binärer Suche; \texttt{extract\_min}: $O(1)$; \texttt{insert}: $O(n)$\\
+Ein \textbf{Heap} leistet alle Operationen in $O(\log n)$ Zeit, auch:
+\begin{itemize}
+\item s=\texttt{find\_min}: Finden eines Elementes mit minimalem Schlüssel, ohne es zu entfernen
+\item \texttt{remove($s$)}: Entfernen von $s$
+\item \texttt{decrease\_key($s$,$k(s)$)}: Verringern des Schlüssels von $s$ auf $k(s)$
+\end{itemize}
+\begin{Definition}
+Ein Heap für eine endliche Menge S mit Schlüsseln $k: S \rightarrow K$ und einer totalen Ordnung $\leq$ von K ist ein Branching B mit einer Bijektion $f: V(B)\rightarrow S$, so dass die \herv{Heapordnung}
+\[K(f(v))\leq K(f(w))\ \forall (v,w)\in E(B)\] gilt. Im Folgenden ist B eine Aboreszenz. Für \emph{\texttt{find\_min}} braucht man dann nur auf das in der Wurzel r gespeicherte Element $f(r)$ zurückgreifen.
+\end{Definition}
+\begin{Prop}
+Sei $n\in \N$. Dann ist der Graph $B_n$ mit $V(B_n)=\{0,\ldots,n-1\}$ und $E(B_n)=\{(i,j):i\in V(B_n), j\in V(B_n)\cap \{2i+1;2i+2\}\}$ eine Aboreszenz mit Wurzel 0. Kein Weg in $B_n$ ist länger als $\left\lfloor \log_2 n \right\rfloor$.
+\end{Prop}
+Aboreszenzen dieses Typs heißen auch \textbf{vollständige Binärbäume}. Ein Heap $(B,f)$ für $S$ heißt \textbf{Binärheap}, wenn $B=B_{|S|}$.
+\begin{Satz}
+Heapsort sortiert n Elemente mit Schlüsseln in $O(n \log n)$ Zeit.
+\end{Satz}
+\section{Optimale Bäume und Wege}
+\subsection{Optimale aufspannende Bäume}
+\begin{Berechnungsproblem}[Minimum-Spanning-Tree-Problem]\\
+\textbf{Eingabe:} ein ungerichteter zusammenhängender Graph $G$, Kantengewichte $c: E(G) \rightarrow \R$\\
+\textbf{Aufgabe:} Berechne einen aufspannenden Baum $(V(G),T)$ in $G$ mit $c(T):=\sum_{e\in T} c(e)$ minimal.
+\end{Berechnungsproblem}
+\begin{Algorithmus}[Kruskals Algorithmus]\\
+\textbf{Eingabe und Ausgabe:} wie oben\\
+Sortiere $E(G)=\{e_1,\ldots,e_m\}$, so dass $c(e_1)\leq\ldots\leq c(e_m)$\\
+$T\leftarrow \emptyset$\\
+\textbf{for} $i\leftarrow 1$ \textbf{to} $m$ \textbf{do:}\\
+\text{\qquad} \textbf{if} $(V(G), T\cup\{e_i\})$ ist Wald \textbf{then} $T\leftarrow T\cup\{e_i\}$
+Mit Laufzeit $O(m \log n)$ implementierbar, wobei $n=|V(G)|$ und $m=|E(G)|$.
+\end{Algorithmus}
+\begin{Lemma}
+Sei $(G,c)$ eine Instanz des MST-Problems. Dann heiße eine Kantenmenge $F\subseteq E(G)$ \herv{gut}, wenn es einen optimalen aufspannenden Baum (MST) $(V(G),T)$ gibt mit $F\subseteq T$.\\ Sei $F\subset E(G)$ gut, $e \in E(G)\setminus F$. Dann ist $F\cup \{e\}$ gut genau dann, wenn ein $X\subset V(G)$ existiert mit $\delta_G(X)\cap F=\emptyset, e\in \delta_G(X)$ und $c(e)\leq c(f)\ \forall f\in \delta_G(X)$.
+\end{Lemma}
+\begin{Algorithmus}[Prims Algorithmus]\\
+\textbf{Eingabe und Ausgabe:} wie bei Kruskal.\\
+Wähle $v\in V(G)$ beliebig.\\
+$X\leftarrow \{v\}$ \\
+$T\leftarrow \emptyset$\\
+\textbf{while} $X\neq V(G)$ \textbf{do:}\\
+\text{\qquad} wähle ein $e\in \delta_G(X)$ mit minimalem Gewicht; sei $e=\{x,y\}, x\in X, y\not\in X$\\
+\text{\qquad} $T\leftarrow T\cup \{e\}$\\
+\text{\qquad} $X\leftarrow \{y\}$ \\
+Mit Hilfe von Binärheaps so implementierbar, dass Laufzeit $O(m \log n)$, $n=|V(G)|$, $m=|E(G)|$
+\end{Algorithmus}
+\subsection{Kürzeste Wege}
+Für einen Graphen $G$ mit Kantengewichten $c: E(G)\rightarrow \R$ sei $\text{dist}_{(G,c)}(x,y):=\min\{c(E(P)): \textit{P ein x-y-Weg in G}\}$ der \textbf{Abstand} von $x$ und $y$ in $G$ (und $\infty$, wenn $y$ nicht von $x$ aus erreichbar ist). Für einen Weg $P$ bezeichne $c(E(P))$ die \textbf{Länge} von $P$.
+\begin{Algorithmus}[Dijkstras Algorithmus]\\
+\textbf{Eingabe:} ein Digraph $G$ mit Kantengewichten $c: E(G)\rightarrow \R_{\geq 0}$, ein Knoten $s\in V(G)$.\\
+\textbf{Ausgabe:} eine Aboreszenz $A=(R,T)$ in $G$ (mit Wurzel $s$), sodass $R$ alle von $s$ aus erreichbaren Knoten enthält und $\text{dist}_{(G,c)}(s,v)=\text{dist}_{(A,c)}(s,v)$ für alle $v \in R$.\\
+$R\leftarrow \emptyset$\\
+$Q\leftarrow \{s\}$\\
+$l(s)\leftarrow 0$\\
+\textbf{while} $Q\neq \emptyset$ \textbf{do:}\\
+\text{\qquad} wähle ein $v\in Q$ mit $l(v)$ minimal.\\
+\text{\qquad} $Q\leftarrow Q\setminus \{v\}$\\
+\text{\qquad} $R\leftarrow R\cup \{v\}$\\
+\text{\qquad} \textbf{for} $e=(v,w)\in \delta^+(v)$ \textbf{do:}\\
+\text{\qquad \qquad} \textbf{if} $w\not\in R \cup Q$ \textbf{then} $l(w)\leftarrow l(v)+c(e), p(w)\leftarrow e, Q\leftarrow Q\cup \{w\}$\\
+\text{\qquad \qquad} \textbf{if} $w\in Q\setminus R$ \textbf{and} $l(v)+l(e)<l(w)$ \textbf{then} $l(w)\leftarrow l(v)+c(e), p(w)\leftarrow e$\\
+$T\leftarrow \{p(v): v\in R\setminus\{s\}\}$\\
+Laufzeit $O(n^2+m)$, wobei $n=|V(G)|$ und $m=|E(G)|$.
+\end{Algorithmus}
+\begin{Satz}
+Mit Hilfe von Binärheaps kann man Dijkstras Algorithmus so implementieren, dass er Laufzeit $O(m \log n)$ hat.
+\end{Satz}
+\subsection{Konservative Kantengewichte}
+\begin{Definition}
+Sei $G$ ein Graph und $c:E(G)\rightarrow \R$. Dann heißt $c$ \herv{konservativ}, falls es in $(G,c)$ keinen Kreis mit negativem Gewicht gibt.
+\end{Definition}
+\begin{Prop}
+Sei G ein Digraph, $c:E(G)\rightarrow \R$ konservativ. Seien $s,w\in V(G), s\neq w$. Sei P ein kürzester s-w-Weg und sei $e=(v,w)$ die letzte Kante von P. Dann ist $P_{\left[s,v\right]}$ (der s-v-Teilweg von P) ein kürzester s-v-Weg.
+\end{Prop}
+Sei $G$ ein Graph, $c: E(G)\rightarrow \R, s\in V(G)$. Ein \textbf{kürzeste-Wege-Baum} mit Wurzel $s$ ist ein Teilgraph $H$ von $G$, so dass $H$ Baum bzw. Aboreszenz ist und $H$ einen kürzesten $s$-$v$-Weg für alle von $s$ aus erreichbaren Knoten $v$ enthält.
+\begin{Algorithmus}[Moore-Bellman-Ford-Algorithmus]\\
+\textbf{Eingabe:} ein Digraph mit konservativen Kantengewichten $c: E(G) \rightarrow \R$, ein Knoten $s\in V(G)$\\
+\textbf{Ausgabe:} ein kürzeste-Wege-Baum, d.h. eine Aboreszenz $A:=(R,T)$ in $G$, so dass $R$ alle von $s$ aus erreichbaren Knoten enthält und $\text{dist}_{(G,c)}(s,v)=\text{dist}_{(A,c)}(s,v)\ \forall v\in R$\\
+$n\leftarrow |V(G)|$\\
+$l(v)\leftarrow \infty\ \forall v\in V(G)\setminus\{s\}$\\
+$l(s)\leftarrow 0$\\
+\textbf{for} $i \leftarrow 1$ \textbf{to} $n-1$ \textbf{do:}\\
+\text{\qquad} \textbf{for} $e=(v,w)\in E(G)$ \textbf{do:}\\
+\text{\qquad \qquad}\textbf{if} $l(v)+c(e)<l(w)$ \textbf{then:} $l(w)\leftarrow l(v)+c(e),$ $p(w)\leftarrow e$\\
+$R\leftarrow \{v\in V(G): l(v)< \infty\}$\\
+$T\leftarrow \{p(v): v\in R\setminus\{s\}\}$\\
+Laufzeit: $O(n\cdot m)$, wobei $n=|V(G)|$ und $m=|E(G)|$.
+\end{Algorithmus}
+\subsection{Kürzeste Wege mit beliebigen Kantengewichten}
+\begin{Definition}
+Ein Algorithmus, dessen Eingabe aus Nullen und Einsen besteht, heißt \herv{polynomiell} (man sagt auch: hat \herv{polynomielle Laufzeit}), wenn es ein $k\in \N$ gibt, so dass seine Laufzeit $O(n^k)$ ist, wobei n die Länge (Anzahl Bits) der Eingabe ist. Ein Algorithmus, dessen Eingabe auch reelle Zahlen enthalten kann, heißt \herv{streng polynomiell}, wenn er für rationale Eingaben polynomiell ist und es ein k gibt, sodass die Anzahl seiner Rechenschritte (inklusive Vergleiche und Grundrechenarten mit reellen Zahlen) $O(n^k)$ ist, wobei n die Anzahl der Bits und reellen Zahlen ist ist.
+\end{Definition}
+\begin{Satz}
+Das allgemeine kürzeste-Wege-Problem kann in $O(m+n^2\cdot 2^n)$ Zeit gelöst werden, wobei $n=|V(G)|$, $m=|E(G)|$.
+\end{Satz}
+Ein polynomieller Algorithmus für das allgemeine kürzeste-Wege-Problem existiert genau dann, wenn $P=NP$ ist. Ob $P=NP$ ist, ist eine wichtigste offene Frage der Mathematik. $P$ ist die Menge der Entscheidungsprobleme, für die es einen polynomiellen Algorithmus gibt. $NP$ enthält alle Entscheidungsprobleme mit folgender Eigenschaft: Es gibt ein Polynom $p$, sodass für alle $n\in \N$ und alle Instanzen mit $n$ Bits, für die die korrekte Antwort \glqq ja\grqq\ lautet, eine Folge von höchstens $p(n)$ Bits (Zertifikat genannt), die \glqq beweist\grqq, dass es sich um eine Ja-Instanz handelt: es gibt einen polynomiellen Algorithmus, der Paare von Instanzen und Zertifikaten korrekt prüft.\\
+Beispiel: Hamiltonkreis-Problem (liegt in $NP$. Liegt in $P$ genau dann, wenn $P=NP$)\\
+\textbf{Eingabe:} ein ungerichteter Graph\\
+\textbf{Ausgabe:} Enthält $G$ einen aufspannenden Kreis (=Hamiltonkreis)\\
+Beispiel: Traveling-Salesman-Problem (liegt auch in $NP$. Liegt in $P$ genau dann, wenn $P=NP$)\\
+\textbf{Eingabe:} ein vollständiger ungerichteter Graph $G$, $c:E(G)\rightarrow \R_{\geq 0}$\\
+\textbf{Ausgabe:} Finde einen Hamiltonkreis minimalen Gewichts.
+\end{document}
