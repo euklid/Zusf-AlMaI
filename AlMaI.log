@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.1.14)  3 JAN 2013 17:56
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.1.14)  3 JAN 2013 18:48
 entering extended mode
  %&-line parsing enabled.
 **AlMaI.tex
@@ -343,10 +343,10 @@ ol-gen-de Aus-sa-gen []aquivalent:
 
  [20] [21] (./AlMaI.aux) ) 
 Here is how much of TeX's memory you used:
- 3255 strings out of 495021
- 42180 string characters out of 1181035
+ 3256 strings out of 495021
+ 42198 string characters out of 1181035
  106603 words of memory out of 3000000
- 6418 multiletter control sequences out of 15000+50000
+ 6419 multiletter control sequences out of 15000+50000
  18479 words of font info for 71 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  30i,11n,26p,1235b,606s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -369,7 +369,7 @@ mf-texlive/fonts/type1/public/amsfonts/cm/cmtt12.pfb></usr/share/texmf-texlive/
 fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr/share/texmf-texlive/fonts/type1/
 public/amsfonts/symbols/msam10.pfb></usr/share/texmf-texlive/fonts/type1/public
 /amsfonts/symbols/msbm10.pfb>
-Output written on AlMaI.pdf (21 pages, 337995 bytes).
+Output written on AlMaI.pdf (21 pages, 337993 bytes).
 PDF statistics:
  154 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
