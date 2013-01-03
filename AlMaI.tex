@@ -103,7 +103,7 @@ Eine Funktion $f: A\rightarrow B$ heißt
 \item \herv{surjektiv}, wenn $\forall b\in B\  \exists a \in A: f(a)=b$
 \item \herv{bijektiv}, wenn $f$ injektiv und surjektiv (\herv{Bijektion})
 \end{itemize}
-Zwei Mengen A und B sind \herv{gleichmächtig}, wenn es eine Bijektion $f: A\rightarrow B$ gibt. Wir schreiben auch $|A|=|B|$. Eine Menge heißt $endlich$, wenn es eine injektive Funktion $f:A \rightarrow \{1,\ldots,n\}$ gibt für ein $n \in \mathbb{N}$ gibt, andernfalls \herv{überabzählbar}.
+Zwei Mengen A und B sind \herv{gleichmächtig}, wenn es eine Bijektion $f: A\rightarrow B$ gibt. Wir schreiben auch $|A|=|B|$. Eine Menge heißt $endlich$, wenn es eine injektive Funktion $f:A \rightarrow \{1,\ldots,n\}$ für ein $n \in \mathbb{N}$ gibt, andernfalls \herv{überabzählbar}.
 \end{Definition}
 \begin{Definition}
 Sei A eine nichtleere endliche Menge. Für $k\in \mathbb{N}\cup\{0\}$ bezeichnen wir mit $A^k$ die Menge der Funktionen $f:\{1,\ldots,k\}\rightarrow A$. Ein Element $f\in A^k$ schreiben wir als Folge $f(1),f(2),\ldots,f(k)$ und bezeichnen es als \herv{Wort} (oder \herv{Zeichenkette}) der \herv{Länge} k über ein \herv{Alphabet} A. Das einzige Element $\emptyset$ von $A^0$ nennen wir das \herv{leere Wort}. \\
@@ -137,8 +137,8 @@ Braucht bis zu $\left(\frac{n}{2}-1 \right)^2$ Multiplikationen $\Rightarrow$ La
 Hat Laufzeit $O(\sqrt{n})$.
 \end{Algorithmus}
 \begin{Definition}
-Für $x\in \mathbb{R}$ sei $\lfloor x \rfloor := max\{k\in \mathbb{Z}: k\leq x\}$ und $\lceil x\rceil := min\{k\in \mathbb{Z}: k\geq x\}$.\\
-Für $a,b\in \mathbb{N}$ sei $a\text{ mod }b := a-b\lfloor\frac{a}{b}\rfloor$
+Für $x\in \mathbb{R}$ sei $\lfloor x \rfloor := \max\{k\in \mathbb{Z}: k\leq x\}$ und $\lceil x\rceil := \min\{k\in \mathbb{Z}: k\geq x\}$.\\
+Für $a,b\in \mathbb{N}$ sei $a\text{\emph{ mod }}b := a-b\lfloor\frac{a}{b}\rfloor$
 \end{Definition}
 \begin{Definition}[Landau-Symbole]
 Sei $g: \mathbb{N} \rightarrow \mathbb{R}_{\geq 0}$. Dann definieren wir: \\
@@ -158,7 +158,7 @@ Laufzeit:$\sum_{i=2}^n \sqrt{i}=O(n\sqrt{n})=\Theta(n\sqrt{n})$
 \textbf{Ausgabe:} Alle Primzahlen $p$ mit $p\leq n$\\
 \textbf{for} $i \leftarrow 2$ \textbf{to} $n$ \textbf{do}: $p(i) \leftarrow$ja\\
 \textbf{for} $i\leftarrow 2$ \textbf{to} $n$ \textbf{do:}\\
-\text{\qquad}\textbf{if} $p(i)=$ja \textbf{then}:\\
+\text{\qquad}\textbf{if} $p(i)=$ ja \textbf{then}:\\
 \text{\qquad \qquad}\textbf{output} $i$\\
 \text{\qquad \qquad}\textbf{for} $j\leftarrow i$ \textbf{to} $\lfloor\frac{n}{i}\rfloor$ \textbf{do}: $p(i\cdot j) \leftarrow$ nein \\
 Hat Laufzeit $O(n\log n)$.
@@ -202,7 +202,7 @@ Sei $b,l\in\N, b\geq 2$. Sei $n=\sum_{i=0}^{l-1}{z_ib^i}$ mit $z_i\in\{0,\ldots,
 \renewcommand{\labelenumi}{\emph{(\roman{enumi})}}
 \begin{enumerate}
 \item $K_{b-1}^{b,l}(n)=\sum_{i=0}^{l-1}{\left(b-1-z_i\right) b^i}$;
-\item $K_b^{b,l}(n+1)=\sum_{i=0}^{l-1}{\left(b-1-z_i\right)}$ wobei $n\neq b^l-1$; außerdem $K_b^{b,l}(0)=0$;
+\item $K_b^{b,l}(n+1)=\sum_{i=0}^{l-1}{\left(b-1-z_i\right) b^i}$ wobei $n\neq b^l-1$; außerdem $K_b^{b,l}(0)=0$;
 \item $K_{b-1}^{b,l}\left(K_{b-1}^{b,l}(n)\right)=n$;
 \item $K_{b}^{b,l}\left(K_{b}^{b,l}(n)\right)=n$
 \end{enumerate}
@@ -220,10 +220,10 @@ Seien l und $b\geq 2$ natürliche Zahlen. Sei $Z:=\left\lbrace -\left\lceil\frac
 \section{Rechnen mit ganzen Zahlen}
 \subsection{Addition und Subtraktion}
 \begin{Prop}
-Für zwei ganze Zahlen x und y können die Summe x+y und Differenz x-y in Laufzeit O(l) berechnet werden, wobei $l=1+\lfloor \log_2(max\{|x|,|y|,1\}\rfloor$ ist.
+Für zwei ganze Zahlen x und y können die Summe x+y und Differenz x-y in Laufzeit O(l) berechnet werden, wobei $l=1+\lfloor \log_2(max\{|x|,|y|,1\})\rfloor$ ist.
 \end{Prop}
 \subsection{Multiplikation}
-Zwei Zahlen mit bis zu l Stellen nach der Schulmethode zu multiplizieren braucht $O(l^2)$ Zeit.
+Zwei Zahlen mit bis zu $l$ Stellen nach der Schulmethode zu multiplizieren braucht $O(l^2)$ Zeit.
 \begin{Algorithmus}[Karatsuba]\\
 \textbf{Eingabe:} $x,y \in \N$, in Binärdarstellung\\
 \textbf{Ausgabe:} $x\cdot y$ in Binärdarstellung\\
@@ -261,7 +261,7 @@ Für alle $a, b \in \N$ gilt:
 \textbf{Eingabe:} $a,b\in\N$\\
 \textbf{Ausgabe:} ggT$(a,b)$\\
 \textbf{while} $a>0$ \textbf{and} $b>0$ \textbf{do:}\\
-\text{\qquad}\textbf{if}$a<b$ \textbf{then} $b\leftarrow b\mod a$ \textbf{else} $a\leftarrow a\mod b$\\
+\text{\qquad}\textbf{if} $a<b$ \textbf{then} $b\leftarrow b\mod a$ \textbf{else} $a\leftarrow a\mod b$\\
 \textbf{output} $\max\{a,b\}$
 \end{Algorithmus}
 Fibonacci-Zahlen: $F_0:=1, F_1:=1, F_{n+1}:=F_n+F_{n-1}, n\in\N$
@@ -269,12 +269,12 @@ Fibonacci-Zahlen: $F_0:=1, F_1:=1, F_{n+1}:=F_n+F_{n-1}, n\in\N$
 \[ F_n=\frac{1}{\sqrt{5}}\left(\left(\frac{1+\sqrt{5}}{2}\right)^n-\left(\frac{1-\sqrt{5}}{2}\right)^n \right) \]
 \end{Lemma}
 \begin{Lemma}
-Falls $a>b>0$ und Euklidischer Algorithmus $k\geq 1$ Iterationen der while-Schleife durchläuft, so gilt $a\geq F_{k+2} und b\geq F_{k+1}$.
+Falls $a>b>0$ und Euklidischer Algorithmus $k\geq 1$ Iterationen der while-Schleife durchläuft, so gilt $a\geq F_{k+2}$ und $b\geq F_{k+1}$.
 \end{Lemma}
 \begin{Satz}[Lamé] Falls $a\geq b$ und $b<F_{k+1}$ für ein $k\in\N$, so durchläuft der euklidische Algorithmus weniger als k Iterationen der while-Schleife.
 \end{Satz}
 \begin{Bemerkung}
-$k\in\N: ggT(F_{k+2},F_{k+1})$ braucht $k$ Iterationen.\\
+$k\in\N: \text{ggT}(F_{k+2},F_{k+1})$ braucht $k$ Iterationen.\\
 $F_n>\Phi^{n-2}$ mit $\Phi=\frac{1+\sqrt{5}}{2}$
 \end{Bemerkung}
 \begin{Korollar}
@@ -292,13 +292,13 @@ Falls $a\geq b\geq 0$, so durchläuft euklidischer Algorithmus höchstens $\lcei
 \begin{Definition}
 Seien $b,m \in \N, b\geq 2$. Eine b-adische m-stellige \herv{normalisierte Gleitkommazahl} hat die Form \[
  x=\sigma \cdot b^E\cdot\left(\sum_{i=0}^{m}{z_ib^{-i}}\right) \]
-mit dem Vorzeichen $\sigma$, der Mantisse $\sum_{i=0}^{m}{z_ib^{-i}}$ mit $z_0\neq 0, z_i\in\{0,\ldots,b-1\}$, für $i=0,\ldots,m$ sowie dem Exponenten E.
+mit dem Vorzeichen $\sigma\in \{-1;1\}$, der Mantisse $\sum_{i=0}^{m}{z_ib^{-i}}$ mit $z_0\neq 0, z_i\in\{0,\ldots,b-1\}$, für $i=0,\ldots,m$ sowie dem Exponenten $E \in \Z$.
 \end{Definition}
 Für die Darstellung am Computer müssen wir $b,m$ und den zulässigen Bereich für den Exponenten $E\in \{E_{\text{min}},\ldots,E_{\text{max}}\}$ festlegen.\\
 Das bestimmt den \textbf{Maschinenzahlbereich} $F(b,m,E_{\text{min}},E_{\text{max}})$, das ist die Menge der $b$-adi\-schen $m$-stelligen normalisierten Gleitkommazahlen mit Exponent $E\in \{E_{\text{min}},\ldots,E_{\text{max}}\}$ zu\-züg\-lich der Zahl 0.\\
 IEEE-Standard 754: \texttt{double}: $b=2, m=52, E\in\{-1022,\ldots,1023\}.$ $ F_{\mathtt{double}}:=F(2,52,-1022,$ $1023)$. $z_0=1$ muss nicht gespeichert werden (hidden Bit). Die freien Exponenten werden genutzt, um z.B. $0, \pm\infty , NaN$ zu speichern. Für den Exponenten E wird die sogenannte \textbf{Bias-Darstellung} verwendet, wodurch zum Exponenten der feste Betrag 1023 hinzuaddiert wird, um alle abgespeicherten Exponenten positiv zu machen.\\
 $\max F_{\mathtt{double}}=$\texttt{std::numeric\_limits<double>::max()}=$(2-2^{-52})\cdot 2^{1023}\approx 1,79\cdot 10^{308}$\\
-$\min \{ f\in F_{\mathtt{double}},f>0\}=$\texttt{std::numeric\_limits<double>::min()}=$(2^{-1022}\approx 2,23\cdot 10^{-308}$\\
+$\min \{ f\in F_{\mathtt{double}},f>0\}=$\texttt{std::numeric\_limits<double>::min()}=$2^{-1022}\approx 2,23\cdot 10^{-308}$\\
 range($F$)=$\left[\min\{f\in F: f>0 \},\max F \right]$
 \subsection{Rundung}
 \begin{Definition} Sei $F=F(b,m,E_{\text{min}},E_{\text{max}})$ ein Maschinenzahlbereich. Eine \herv{Rundung} (zu F) ist eine Funktion $rd: \R \rightarrow F$, wenn für alle $x \in \R$ gilt: $|x-rd(x)|=\min_{a\in F} |x-a|$.
@@ -364,7 +364,7 @@ Seien $x,y \in \R\setminus\{0\}$ und $\tilde x, \tilde y$ Näherungen mit $\vare
 \subsection{Kondition}
 \begin{Definition}
 Sei $P\subseteq D\times E$ ein numerisches Berechungsproblem mit $D,E \subseteq \R$. Sei $d\in D$ (eine Instanz von P) mit $d\neq 0$. Dann ist die \herv{(relative) Kondition} von d, oft $\kappa(d)$ genannt, definiert als
-\[ \lim_{\varepsilon \rightarrow 0}\ \sup \left\lbrace\inf \left\lbrace \frac{\left|\frac{e-e'}{e}\right|}{\left|\frac{d-d'}{d}\right|}:e\in E:(d,e)\in P \right\rbrace : d'\in D, e\in E, (d',e')\in P, 0<|d-d'|<\varepsilon \right\rbrace ,
+\[ \lim_{\varepsilon \rightarrow 0}\ \sup \left\lbrace\inf \left\lbrace \frac{\left|\frac{e-e'}{e}\right|}{\left|\frac{d-d'}{d}\right|}:e\in E:(d,e)\in P \right\rbrace : d'\in D, e'\in E, (d',e')\in P, 0<|d-d'|<\varepsilon \right\rbrace ,
 \]
 wobei $\frac{0}{0}:=0$.\\
 Bezeichnet $\kappa(d)$ die relative Kondition von d, so ist $\sup \{\kappa(d):d\in D, d\neq 0\}$ die (rel.) Kondition von P.\\
@@ -431,7 +431,7 @@ Sei $a\geq 1, x_0\geq 1$. Für die in \eqref{Babylon} definierte Folge $(x_n)_{n
 \section{Graphen}
 \begin{Definition}
 Ein \herv{ungerichteter Graph} ist ein Tripel $(V,E,\Psi)$, wobei V und E endliche Mengen sind, $V\neq\emptyset$, und $\Psi:E\rightarrow\{X\subseteq V:|X|=2\}$.\\
-Ein \herv{gerichteter Graph} ist ein Tripel $(V,E,\Psi)$, wobei V und E endliche Mengen sind, $V\neq \emptyset$ und $\Psi: E\rightarrow\{(v,w)\in V\times V: v\neq v\}$.\\
+Ein \herv{gerichteter Graph} ist ein Tripel $(V,E,\Psi)$, wobei V und E endliche Mengen sind, $V\neq \emptyset$ und $\Psi: E\rightarrow\{(v,w)\in V\times V: v\neq w\}$.\\
 Ein Graph ist ein gerichteter Graph (oder auch \herv{Digraph}) oder ein ungerichteter Graph. \\
 Die Elemente von V heißen \herv{Knoten} und die Elemente von E \herv{Kanten}. \\
 Zwei Kanten $e\neq e'$ mit $\Psi(e)=\Psi(e')$ heißen parallel. Graphen ohne parallele Kanten heißen einfach. In einfachen zusammenhängenden Graphen kann man jede Kante e mit $\Psi(e)$ identifizieren. Man schreibt $G=(V(G),E(G))$, wobei \\
@@ -463,7 +463,7 @@ Weiterhin definiere $G-v := G\left[V(G)\setminus \{v\}\right]$ und $G-e:= G(V(G)
 \end{Definition}
 \subsection{Wege und Kreise}
 \begin{Definition}
-Ein Kantenzug (von $x_1$ nach $x_{k+1}$) in einem Graphen G ist eine Folge $x_1, e_1,\\ x_2, e_2, \ldots, x_k, e_k, x_{k+1}$ mit $k\in \N\cup\{0\}$ und $e_i=(x_i,x_{i+i})\in E(G)$ bzw. $e_i=\{x_i,x_{i+i}\}\in E(G)$ für $i=1,\ldots,k$. Falls $x_1=x_{k+1}$, so handelt es sich um einen \herv{geschlossenen Kantenzug}. Ein \herv{Weg} ist ein Graph $P=(\{x_1,\ldots,x_{k+1}\},\{e_1,\ldots,e_k\})$, so dass $x_i\leq x_j$ für $1\leq i \leq j\leq k+1$ und $x_1,e_1,x_2,e_2,\ldots,e_k,x_{k+1}$ ist ein Kantenzug. P heißt auch \herv{$x_1-x_{k+1}-$Weg} oder \herv{Weg von} $x_1$ \herv{nach} $x_{k+1}$. $x_1$ und $x_{k+1}$ heißen \herv{Endknoten} von P, die anderen Knoten \herv{innere Knoten} von P. Ein \herv{Kreis} ist ein Graph $C=(\{x_1,\ldots,x_k\},\{e_1,\ldots,e_k\})$ mit $k\geq 2, x_i\neq x_j$ und $e_i\neq e_j$ für $1\leq i\leq j\leq k$ und $x_1,e_1,x_2,e_2,\ldots,x_k,e_k,x_1$ ist ein geschlossener Kantenzug. Die \herv{Länge} eines Weges oder Kreises ist die Anzahl seiner Kanten. Ist ein Weg oder Kreis Teilgraph von G, so sprechen wir auch von einem \herv{Weg} oder \herv{Kreis in} G. In einem Graph G heißt ein Knoten y von einem Knoten x aus \herv{erreichbar}, wenn es einen x-y-Weg gibt.
+Ein Kantenzug (von $x_1$ nach $x_{k+1}$) in einem Graphen G ist eine Folge $x_1, e_1,\\ x_2, e_2, \ldots, x_k, e_k, x_{k+1}$ mit $k\in \N\cup\{0\}$ und $e_i=(x_i,x_{i+i})\in E(G)$ bzw. $e_i=\{x_i,x_{i+i}\}\in E(G)$ für $i=1,\ldots,k$. Falls $x_1=x_{k+1}$, so handelt es sich um einen \herv{geschlossenen Kantenzug}. Ein \herv{Weg} ist ein Graph $P=(\{x_1,\ldots,x_{k+1}\},\{e_1,\ldots,e_k\})$, so dass $x_i\neq x_j$ für $1\leq i < j\leq k+1$ und $x_1,e_1,x_2,e_2,\ldots,e_k,x_{k+1}$ ist ein Kantenzug. P heißt auch \herv{$x_1-x_{k+1}-$Weg} oder \herv{Weg von} $x_1$ \herv{nach} $x_{k+1}$. $x_1$ und $x_{k+1}$ heißen \herv{Endknoten} von P, die anderen Knoten \herv{innere Knoten} von P. Ein \herv{Kreis} ist ein Graph $C=(\{x_1,\ldots,x_k\},\{e_1,\ldots,e_k\})$ mit $k\geq 2, x_i\neq x_j$ und $e_i\neq e_j$ für $1\leq i < j\leq k$ und $x_1,e_1,x_2,e_2,\ldots,x_k,e_k,x_1$ ist ein geschlossener Kantenzug. Die \herv{Länge} eines Weges oder Kreises ist die Anzahl seiner Kanten. Ist ein Weg oder Kreis Teilgraph von G, so sprechen wir auch von einem \herv{Weg} oder \herv{Kreis in} G. In einem Graph G heißt ein Knoten y von einem Knoten x aus \herv{erreichbar}, wenn es einen x-y-Weg gibt.
 \end{Definition}
 \begin{Lemma}
 Sei G ein Graph, $x,y\in V(G)$. Es gibt genau dann einen x-y-Weg in G, wenn es einen Kantenzug von x nach y gibt.
@@ -473,7 +473,7 @@ Zwei Graphen heißen \textbf{knoten- bzw. kantendisjunkt}, wenn sie keine Knoten
 \begin{Lemma}
 Sei G ein ungerichteter Graph mit $|\delta(V)|$ gerade $\forall v \in V(G)$ oder ein gerichteter Graph mit $|\delta^-(v)|=|\delta^+(v)|\ \forall v\in V(G)$. Dann existiert ein $k\geq 0$ und paarweise kantendisjunkte Kreise $C_1,\ldots,C_k$, sodass $E(G)=E(C_1)\cup \ldots \cup E(C_k)$.
 \end{Lemma}
-Für zwei Mengen $A$ und $B$ sei $A \bigtriangleup B := (A\setminus B)\cup (B\setminus A)=(A\cup B)\setminus(A\cap B)$ die \textbf{symmetrische Differenz} von $A$ und $B$. Mit $A \mathbin{\dot{\cup}} B$ bezeichnen wir die disjunkte Vereinigung, in der Elemente aus $A \bigtriangleup B$ einfach und Elemente aus $A\cap B$ doppelt vorkommen.
+Für zwei Mengen $A$ und $B$ sei $A \bigtriangleup B := (A\setminus B)\cup (B\setminus A)=(A\cup B)\setminus(A\cap B)$ die \textbf{symmetrische Differenz} von $A$ und $B$. Mit $A \mathbin{\dot{\cup}} B$ bezeichnen wir die \textbf{disjunkte Vereinigung}, in der Elemente aus $A \bigtriangleup B$ einfach und Elemente aus $A\cap B$ doppelt vorkommen.
 \begin{Lemma}
 Sei G ein Graph, und seien P ein s-t-Weg in G und Q ein t-s-Weg mit $P\neq Q$. Dann enthält $(V(P)\cup V(Q),E(P)\cup E(Q))$ einen Kreis.
 \end{Lemma}
@@ -558,7 +558,7 @@ wenn G gerichtet.
 Sei $\mathcal{G}$ die Menge aller Graphen, $f:\mathcal{G} \rightarrow \R_{\geq 0}$ und $g:\mathcal{G}\rightarrow \R_{\geq 0}$. Wir sagen: $f=O(g)$, wenn $\alpha > 0$ und $n_0\in \N$ existieren, sodass $\forall G\in \mathcal{G}$ mit $|V(G)|\geq n_0$ gilt $f(G)\leq \alpha\cdot g(G)$. Analog für $\Omega$ und $\Theta$.
 $f$ misst Laufzeit/Speicherbedarf. $g$ hängt nur von der Anzahl der Knoten ($n$) und Kanten ($m$) ab.\\
 Beispielsweise ist der Speicherbedarf der Adjazenzmatrix $\Omega(n^2)$ und der der Inzidenzmatrix ist $\Theta(m\cdot n)$. Für große Graphen mit $\Theta(n)$ Kanten ist das zuviel.\\
-\textbf{Adjazenzlistendarstellung:}speichere für jeden Knoten eine Liste der inzidenten Kanten.\\
+\textbf{Adjazenzlistendarstellung:} speichere für jeden Knoten eine Liste der inzidenten Kanten.\\
 \begin{minipage}{0.33\textwidth}
 \vspace*{0.1cm}
 \fbox{$\delta^+(1)$} $\rightarrow$ \fbox{$c$} $\rightarrow \blacksquare$\\
@@ -594,12 +594,12 @@ Speicherbedarf: $O(n+m)$ mit der \textbf{Annahme}, dass Speicherplatz für Knote
 \textbf{Ausgabe:} die Menge $R\subseteq V(G)$ der von $r$ aus erreichbaren Knoten und eine Menge $F\subseteq E(G)$, sodass $(R,F)$ eine Aboreszenz mit Wurzel $r$ bzw. ein Baum ist.\\
 $R\leftarrow \{r\}$\\
 $Q\leftarrow \{r\}$\\
-$f\leftarrow \emptyset$\\
+$F\leftarrow \emptyset$\\
 \textbf{while} $Q \neq \emptyset$ \textbf{do:}\\
 \text{\qquad} Wähle $v\in Q$\\
 \text{\qquad} \textbf{if} $\exists e=(v,w)\in \delta^+_G(v)$ bzw. $e=\{v,w\}\in \delta_G(v)$ mit $w \not\in R$\\
 \text{\qquad} \textbf{then} $R\leftarrow R\cup \{w\}$, $Q\leftarrow Q\cup \{w\}$, $F\leftarrow F\cup\{e\}$\\
-\text{\qquad} \textbf{else} $Q\leftarrow Q\setminus\{r\}$\\
+\text{\qquad} \textbf{else} $Q\leftarrow Q\setminus\{v\}$\\
 \textbf{output} $(R,F)$\\
 kann in linearer Laufzeit $O(m+n)$ implementiert werden, wobei $n=|V(G)|$ und $m=|E(G)|$. 
 \end{Algorithmus}
@@ -629,7 +629,7 @@ Ein ungerichteter Graph ist genau dann bipartit, wenn er keinen ungeraden Kreis 
 \subsection{Azyklische Digraphen}
 \begin{Definition}
 Ein Digraph ist \herv{azyklisch}, wenn er keinen Kreis enthält. \\
-Sei G ein Digraph mit n Knoten. Eine \herv{topologische Ordnung} von G ist eine Ordnung der Knoten $V(G)=\{v_1,\ldots,v_n\}$, sodass $i<j$ für alle Kanten $(i,j)\in E(G)$ gilt.
+Sei G ein Digraph mit n Knoten. Eine \herv{topologische Ordnung} von G ist eine Ordnung der Knoten $V(G)=\{v_1,\ldots,v_n\}$, sodass $i<j$ für alle Kanten $(v_i,v_j)\in E(G)$ gilt.
 \end{Definition}
 \begin{Lemma}
 Ist G ein Digraph mit $\delta^+(v)\neq \emptyset\ \forall v \in V(G)$, so kann man in $(O(|V(G)|)$ Zeit einen Kreis in G finden. (irgendwo starten und Kanten entlang laufen, bis sich ein Knoten wiederholt.)
@@ -661,7 +661,7 @@ Manchmal hat man mehr Informationen über $\preceq$ oder $\prec$ und kann diese 
 \textbf{for} $i\leftarrow 1$ \textbf{to} $n$ \textbf{do}:\\
 \text{\qquad} \textbf{for} $j \leftarrow i$ \textbf{to} $n$ \textbf{do:}\\
 \text{\qquad \qquad} \textbf{if} $f(j)\preceq f(i)$ \textbf{then swap}$(f(i),f(j))$\\
-\textbf{output} f  \\
+\textbf{output} $f$  \\
 Laufzeit: $O(n^2)$
 \end{Algorithmus}
 Für $0\leq k\leq n$ sei $\binom n k:=\frac{n!}{k!\cdot (n-k)!}$ (wobei $0!:=1$). Für eine endliche Menge $S$ und $0\leq k \leq |S|$ sei $\binom S k := \{A\subseteq S: |A|=k\}$. Es ist $\left|\binom S k \right| = \binom {|S|}{k}$. Der obige Algorithmus ruft $\binom n 2$ mal das Orakel auf (, wenn man die Aufrufe $(i,i)$ weglässt).
@@ -669,9 +669,9 @@ Für $0\leq k\leq n$ sei $\binom n k:=\frac{n!}{k!\cdot (n-k)!}$ (wobei $0!:=1$)
 Für jeden Algorithmus für das allgemeine Sortierproblem und jedes $n\in \N$ gibt es eine Eingabe $(S,\preceq)$ mit $|S|=n$, für die der Algorithmus mindestens $\binom n 2$ Orakelaufrufe braucht.
 \end{Satz}
 \subsection{Sortieren nach Schlüsseln}
-In vielen Anwendungen sortiert man nach \textbf{Schlüsseln}. Für jedes $s\in S$ hat man einen Schlüssel $k(s)\in K$, wobei K eine Menge mit einer totalen Ordnung ist (oft $\N$ oder $\R$ mit der gewohnten Ordnung). Eine partielle Ordnung $\leq$ auf $S$ ist dann durch $a\preceq b :\Leftrightarrow \\(a=b \vee K(a) < K(b)), (a,b\in S)$ gegeben. Eine so entstandene partielle Ordnung heißt \textbf{durch Schlüssel induziert}.
+In vielen Anwendungen sortiert man nach \textbf{Schlüsseln}. Für jedes $s\in S$ hat man einen Schlüssel $k(s)\in K$, wobei $K$ eine Menge mit einer totalen Ordnung ist (oft $\N$ oder $\R$ mit der gewohnten Ordnung). Eine partielle Ordnung $\leq$ auf $S$ ist dann durch $a\preceq b :\Leftrightarrow \\(a=b \vee K(a) < K(b)), (a,b\in S)$ gegeben. Eine so entstandene partielle Ordnung heißt \textbf{durch Schlüssel induziert}.
 \begin{Berechnungsproblem}[Sortieren mit Schlüsseln]\\
-\textbf{Eingabe:} endliche Menge $S$, $k: S \rightarrow K$ und eine totale Ordnung $\leq$ auf K\\
+\textbf{Eingabe:} endliche Menge $S$, $k: S \rightarrow K$ und eine totale Ordnung $\leq$ auf $K$\\
 \textbf{Aufgabe:} Berechne eine Bijektion $f:\{1,\ldots,n\} \rightarrow S$ mit $K(i)\leq K(j)\ \forall 1\leq i < j\leq n$ 
 \end{Berechnungsproblem}
 Variante: Wir kennen $k, K, \leq$ nur über ein Orakel für $\leq$ (wie im allgemeinen Sortierproblem), wissen aber nun, dass $\leq$ durch Schlüssel induziert ist.\\
@@ -718,20 +718,20 @@ Eine \textbf{Prioritätswarteschlange} (priority queue) ist eine Datenstruktur, 
 \begin{itemize}
 \item \texttt{init}: Einrichten einer leeren Warteschlange (Konstruktur)
 \item \texttt{insert($s$,$k(s)$)}: füge Element $s$ mit Schlüssel $k(s)$ ein.
-\item s=\texttt{extract\_min}: finde ein Element mit minimalem Schlüssel und entferne es
+\item $s$=\texttt{extract\_min}: finde ein Element mit minimalem Schlüssel und entferne es
 \item \texttt{clear} Löschen der Warteschlange (Destruktor)
 \end{itemize}
 Liste/Array/vector: \texttt{insert} in $O(1)$; \texttt{extract\_min} in $O(n)$ (bei $n$ Elementen)\\
 sortiertes Array/vector=sortierte Liste: \texttt{find} in $O(n \log n)$ mit binärer Suche; \texttt{extract\_min}: $O(1)$; \texttt{insert}: $O(n)$\\
 Ein \textbf{Heap} leistet alle Operationen in $O(\log n)$ Zeit, auch:
 \begin{itemize}
-\item s=\texttt{find\_min}: Finden eines Elementes mit minimalem Schlüssel, ohne es zu entfernen
+\item $s$=\texttt{find\_min}: Finden eines Elementes mit minimalem Schlüssel, ohne es zu entfernen
 \item \texttt{remove($s$)}: Entfernen von $s$
 \item \texttt{decrease\_key($s$,$k(s)$)}: Verringern des Schlüssels von $s$ auf $k(s)$
 \end{itemize}
 \begin{Definition}
 Ein Heap für eine endliche Menge S mit Schlüsseln $k: S \rightarrow K$ und einer totalen Ordnung $\leq$ von K ist ein Branching B mit einer Bijektion $f: V(B)\rightarrow S$, so dass die \herv{Heapordnung}
-\[K(f(v))\leq K(f(w))\ \forall (v,w)\in E(B)\] gilt. Im Folgenden ist B eine Aboreszenz. Für \emph{\texttt{find\_min}} braucht man dann nur auf das in der Wurzel r gespeicherte Element $f(r)$ zurückgreifen.
+\[k(f(v))\leq k(f(w))\ \forall (v,w)\in E(B)\] gilt. Im Folgenden ist B eine Aboreszenz. Für \emph{\texttt{find\_min}} braucht man dann nur auf das in der Wurzel r gespeicherte Element $f(r)$ zurückgreifen.
 \end{Definition}
 \begin{Prop}
 Sei $n\in \N$. Dann ist der Graph $B_n$ mit $V(B_n)=\{0,\ldots,n-1\}$ und $E(B_n)=\{(i,j):i\in V(B_n), j\in V(B_n)\cap \{2i+1;2i+2\}\}$ eine Aboreszenz mit Wurzel 0. Kein Weg in $B_n$ ist länger als $\left\lfloor \log_2 n \right\rfloor$.
@@ -751,7 +751,7 @@ Heapsort sortiert n Elemente mit Schlüsseln in $O(n \log n)$ Zeit.
 Sortiere $E(G)=\{e_1,\ldots,e_m\}$, so dass $c(e_1)\leq\ldots\leq c(e_m)$\\
 $T\leftarrow \emptyset$\\
 \textbf{for} $i\leftarrow 1$ \textbf{to} $m$ \textbf{do:}\\
-\text{\qquad} \textbf{if} $(V(G), T\cup\{e_i\})$ ist Wald \textbf{then} $T\leftarrow T\cup\{e_i\}$
+\text{\qquad} \textbf{if} $(V(G), T\cup\{e_i\})$ ist Wald \textbf{then} $T\leftarrow T\cup\{e_i\}$\\
 Mit Laufzeit $O(m \log n)$ implementierbar, wobei $n=|V(G)|$ und $m=|E(G)|$.
 \end{Algorithmus}
 \begin{Lemma}
@@ -765,8 +765,8 @@ $T\leftarrow \emptyset$\\
 \textbf{while} $X\neq V(G)$ \textbf{do:}\\
 \text{\qquad} wähle ein $e\in \delta_G(X)$ mit minimalem Gewicht; sei $e=\{x,y\}, x\in X, y\not\in X$\\
 \text{\qquad} $T\leftarrow T\cup \{e\}$\\
-\text{\qquad} $X\leftarrow \{y\}$ \\
-Mit Hilfe von Binärheaps so implementierbar, dass Laufzeit $O(m \log n)$, $n=|V(G)|$, $m=|E(G)|$
+\text{\qquad} $X\leftarrow X\cup \{y\}$ \\
+Mit Hilfe von Binärheaps so implementierbar, dass Laufzeit $O(m \log n)$, $n=|V(G)|$, $m=|E(G)|$.
 \end{Algorithmus}
 \subsection{Kürzeste Wege}
 Für einen Graphen $G$ mit Kantengewichten $c: E(G)\rightarrow \R$ sei $\text{dist}_{(G,c)}(x,y):=\min\{c(E(P)): \textit{P ein x-y-Weg in G}\}$ der \textbf{Abstand} von $x$ und $y$ in $G$ (und $\infty$, wenn $y$ nicht von $x$ aus erreichbar ist). Für einen Weg $P$ bezeichne $c(E(P))$ die \textbf{Länge} von $P$.
@@ -817,7 +817,7 @@ Ein Algorithmus, dessen Eingabe aus Nullen und Einsen besteht, heißt \herv{poly
 \begin{Satz}
 Das allgemeine kürzeste-Wege-Problem kann in $O(m+n^2\cdot 2^n)$ Zeit gelöst werden, wobei $n=|V(G)|$, $m=|E(G)|$.
 \end{Satz}
-Ein polynomieller Algorithmus für das allgemeine kürzeste-Wege-Problem existiert genau dann, wenn $P=NP$ ist. Ob $P=NP$ ist, ist eine wichtigste offene Frage der Mathematik. $P$ ist die Menge der Entscheidungsprobleme, für die es einen polynomiellen Algorithmus gibt. $NP$ enthält alle Entscheidungsprobleme mit folgender Eigenschaft: Es gibt ein Polynom $p$, sodass für alle $n\in \N$ und alle Instanzen mit $n$ Bits, für die die korrekte Antwort \glqq ja\grqq\ lautet, eine Folge von höchstens $p(n)$ Bits (Zertifikat genannt), die \glqq beweist\grqq, dass es sich um eine Ja-Instanz handelt: es gibt einen polynomiellen Algorithmus, der Paare von Instanzen und Zertifikaten korrekt prüft.\\
+Ein polynomieller Algorithmus für das allgemeine kürzeste-Wege-Problem existiert genau dann, wenn $P=NP$ ist. Ob $P=NP$ ist, ist eine wichtigste offene Frage der Mathematik. $P$ ist die Menge der Entscheidungsprobleme, für die es einen polynomiellen Algorithmus gibt. $NP$ enthält alle Entscheidungsprobleme mit folgender Eigenschaft: Es gibt ein Polynom $p$, sodass für alle $n\in \N$ und alle Instanzen mit $n$ Bits, für die die korrekte Antwort \glqq ja\grqq\ lautet, eine Folge von höchstens $p(n)$ Bits (Zertifikat genannt) existiert, die \glqq beweist\grqq, dass es sich um eine Ja-Instanz handelt: es gibt einen polynomiellen Algorithmus, der Paare von Instanzen und Zertifikaten korrekt prüft.\\
 Beispiel: Hamiltonkreis-Problem (liegt in $NP$. Liegt in $P$ genau dann, wenn $P=NP$)\\
 \textbf{Eingabe:} ein ungerichteter Graph\\
 \textbf{Ausgabe:} Enthält $G$ einen aufspannenden Kreis (=Hamiltonkreis)\\
