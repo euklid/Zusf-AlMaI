@@ -1,7 +1,7 @@
 \contentsline {Definition}{{Definition}{1.{1}}{}}{2}
 \contentsline {Definition}{{Definition}{1.{2}}{}}{2}
 \contentsline {Definition}{{Definition}{1.{3}}{}}{2}
-\contentsline {Definition}{{Definition}{1.{4}}{}}{2}
+\contentsline {Definition}{{Definition}{1.{4}}{}}{3}
 \contentsline {Definition}{{Definition}{1.{5}}{}}{3}
 \contentsline {Entscheidungsproblem}{{Entscheidungsproblem}{1.{6}}{\glqq prim?\grqq }}{3}
 \contentsline {Algorithmus}{{Algorithmus}{1.{7}}{Einfacher Primzahltest}}{3}
@@ -101,3 +101,11 @@
 \contentsline {Algorithmus}{{Algorithmus}{9.{9}}{Moore-Bellman-Ford-Algorithmus}}{20}
 \contentsline {Definition}{{Definition}{9.{10}}{}}{20}
 \contentsline {Satz}{{Satz}{9.{11}}{}}{20}
+\contentsline {Definition}{{Definition}{10.{1}}{}}{21}
+\contentsline {Berechnungsproblem}{{Berechnungsproblem}{10.{2}}{Matching-Problem}}{21}
+\contentsline {Prop}{{Proposition}{10.{3}}{}}{21}
+\contentsline {Satz}{{Satz}{10.{4}}{}}{21}
+\contentsline {Definition}{{Definition}{10.{5}}{}}{21}
+\contentsline {Satz}{{Satz}{10.{6}}{}}{21}
+\contentsline {Algorithmus}{{Algorithmus}{10.{7}}{Bipartiter-Matching-Algorithmus}}{21}
+\contentsline {Satz}{{Satz}{10.{8}}{Heiratssatz}}{22}

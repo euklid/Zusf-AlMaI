@@ -103,7 +103,7 @@ Eine Funktion $f: A\rightarrow B$ heißt
 \item \herv{surjektiv}, wenn $\forall b\in B\  \exists a \in A: f(a)=b$
 \item \herv{bijektiv}, wenn $f$ injektiv und surjektiv (\herv{Bijektion})
 \end{itemize}
-Zwei Mengen A und B sind \herv{gleichmächtig}, wenn es eine Bijektion $f: A\rightarrow B$ gibt. Wir schreiben auch $|A|=|B|$. Eine Menge heißt $endlich$, wenn es eine injektive Funktion $f:A \rightarrow \{1,\ldots,n\}$ für ein $n \in \mathbb{N}$ gibt, andernfalls \herv{überabzählbar}.
+Zwei Mengen A und B sind \herv{gleichmächtig}, wenn es eine Bijektion $f: A\rightarrow B$ gibt. Wir schreiben auch $|A|=|B|$. Eine Menge heißt \herv{endlich}, wenn es eine injektive Funktion $f:A \rightarrow \{1,\ldots,n\}$ gibt für ein $n \in \mathbb{N}$, andernfalls \herv{unendlich}. Eine Menge A heißt \herv{abzählbar}, wenn es eine injektive Funktion $f:A\rightarrow \N$ gibt, andernfalls \herv{überabzählbar}.
 \end{Definition}
 \begin{Definition}
 Sei A eine nichtleere endliche Menge. Für $k\in \mathbb{N}\cup\{0\}$ bezeichnen wir mit $A^k$ die Menge der Funktionen $f:\{1,\ldots,k\}\rightarrow A$. Ein Element $f\in A^k$ schreiben wir als Folge $f(1),f(2),\ldots,f(k)$ und bezeichnen es als \herv{Wort} (oder \herv{Zeichenkette}) der \herv{Länge} k über ein \herv{Alphabet} A. Das einzige Element $\emptyset$ von $A^0$ nennen wir das \herv{leere Wort}. \\
@@ -824,4 +824,41 @@ Beispiel: Hamiltonkreis-Problem (liegt in $NP$. Liegt in $P$ genau dann, wenn $P
 Beispiel: Traveling-Salesman-Problem (liegt auch in $NP$. Liegt in $P$ genau dann, wenn $P=NP$)\\
 \textbf{Eingabe:} ein vollständiger ungerichteter Graph $G$, $c:E(G)\rightarrow \R_{\geq 0}$\\
 \textbf{Ausgabe:} Finde einen Hamiltonkreis minimalen Gewichts.
+\section{Matchings und Netzwerkflüsse}
+\begin{Definition}
+Sei G ein ungerichteter Graph. Eine Menge von Kanten $M\subseteq E(G)$ heißt \herv{Matching} in G, falls $|\delta_{G}(v)\cap M|\leq 1$ für alle $v \in V(G)$ gilt. Ein \herv{perfektes Matching} ist ein Matching mit $\frac{|V(G)|}{2}$ Kanten.
+\end{Definition}
+\begin{Berechnungsproblem}[Matching-Problem]\\
+\textbf{Eingabe:} ein ungerichteter Graph $G$\\
+\textbf{Ausgabe:} Berechne ein Matching in $G$ mit maximaler Kardinalität.
+\end{Berechnungsproblem}
+\begin{Prop}
+Ein inklusionsmaximales Matching kann in $O(n+m)$ Zeit berechnet werden, wobei $n=|V(G)|$ und $m=|E(G)|$.
+\end{Prop}
+\begin{Satz}
+Ist $M$ ein inklusionsmaximales Matching und $M^{*}$ ein kardinalitätsmaximales, dann gilt $|M|\geq \frac{1}{2} |M^ {*}|$.
+\end{Satz}
+\begin{Definition}
+Sei G ein ungerichteter Graph und M ein Matching in G. Ein \herv{M-aug\-men\-tie\-ren\-der} Weg in G ist ein Weg P in G mit $|E(G)\cap M|=|E(P)\setminus M|-1$, dessen Endpunkte zu keiner Kante von M inzident sind.
+\end{Definition}
+\begin{Satz}
+Sei G ein ungerichteter Graph, M ein Matching in G. Dann gibt es genau dann ein Matching $M'$ mit $|M'|>|M|$, wenn es einen M-augmentierenden Weg gibt.
+\end{Satz}
+\begin{Algorithmus}[Bipartiter-Matching-Algorithmus]\\
+\textbf{Eingabe:} ein bipartiter Graph G\\
+\textbf{Ausgabe:} ein Matching $M$ in $G$ mit maximaler Kardinalität\\
+$M\leftarrow \emptyset$\\
+$X\leftarrow \{v\in V(G):\delta(v)\neq \emptyset\}$\\
+Berechne eine Bipartition $V(G)=A\cupdot B$ von $G[X]$.\\
+\textbf{while true do:}\\
+\text{\qquad} $V(H) \leftarrow A\cupdot B\cupdot\{s,t\}$,\\
+\text{\qquad} $E(H)\leftarrow \left( \{s\}\times (A \cap X)\right) \cup \{(a,b)\in A\times B:\{a,b\}\in E(G)\setminus M\} \cup$ \\ \text{\qquad\qquad\qquad} $ \{(b,a)\in B\times A: \{a,b\}\in M\} \cup \left( (B\cap X) \times \{t\}\right)$ \\
+\text{\qquad} \textbf{if} $t$ nicht von $s$ aus in $H$ erreichbar \textbf{then stopp}.\\
+\text{\qquad} Sei $P$ ein $s-t-$Weg in $H$.\\
+\text{\qquad} $M\leftarrow M \triangle \{\{v,w\} \in E(G):(v,w)\in E(P)\}, X \leftarrow X \setminus V(P)$\\
+Laufzeit: $O(m\cdot n)$, wobei $n=|V(G)|$ und $m=|E(G)|$
+\end{Algorithmus}
+\begin{Satz}[Heiratssatz]
+Ein bipartiter Graph $G=(A\cupdot B, E(G))$ mit $|A|=|B|$ besitzt genau dann ein perfektes Matching, wenn $\Gamma(S)|\geq |S|$ für alle $S\subseteq A$.
+\end{Satz}
 \end{document}
