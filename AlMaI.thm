@@ -109,3 +109,22 @@
 \contentsline {Satz}{{Satz}{10.{6}}{}}{21}
 \contentsline {Algorithmus}{{Algorithmus}{10.{7}}{Bipartiter-Matching-Algorithmus}}{21}
 \contentsline {Satz}{{Satz}{10.{8}}{Heiratssatz}}{22}
+\contentsline {Definition}{{Definition}{10.{9}}{}}{22}
+\contentsline {Berechnungsproblem}{{Berechnungsproblem}{10.{10}}{Fluss-Problem}}{22}
+\contentsline {Lemma}{{Lemma}{10.{11}}{}}{22}
+\contentsline {Definition}{{Definition}{10.{12}}{}}{22}
+\contentsline {Definition}{{Definition}{10.{13}}{}}{22}
+\contentsline {Lemma}{{Lemma}{10.{14}}{}}{22}
+\contentsline {Satz}{{Satz}{10.{15}}{}}{22}
+\contentsline {Satz}{{Satz}{10.{16}}{Max-Flow-Min-Cut-Theorem}}{22}
+\contentsline {Algorithmus}{{Algorithmus}{10.{17}}{Ford-Fulkerson-Algorithmus}}{22}
+\contentsline {Korollar}{{Korollar}{10.{18}}{}}{23}
+\contentsline {Algorithmus}{{Algorithmus}{10.{19}}{Algorithmus von Edmonds und Karp}}{23}
+\contentsline {Lemma}{{Lemma}{10.{20}}{}}{23}
+\contentsline {Satz}{{Satz}{10.{21}}{}}{23}
+\contentsline {Berechnungsproblem}{{Berechnungsproblem}{11.{1}}{Lineare Gleichungssysteme}}{23}
+\contentsline {Lemma}{{Lemma}{11.{2}}{}}{23}
+\contentsline {Definition}{{Definition}{11.{3}}{}}{24}
+\contentsline {Prop}{{Proposition}{11.{4}}{}}{24}
+\contentsline {Lemma}{{Lemma}{11.{5}}{}}{24}
+\contentsline {Lemma}{{Lemma}{11.{6}}{}}{24}

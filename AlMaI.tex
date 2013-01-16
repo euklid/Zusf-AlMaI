@@ -8,13 +8,14 @@
 
 \documentclass[12pt,a4paper]{article}
 \usepackage[utf8x]{inputenc}
-\usepackage{ucs}
+%\usepackage{ucs}
 \usepackage[left=2.0cm, right=2.0cm, top=2.0cm, bottom=2.0cm]{geometry}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage[ngerman]{babel}
 \usepackage{amssymb}
 \usepackage[amsthm,thmmarks]{ntheorem}
+\usepackage{bbm}
 % b) Lemma, Satz, Theorem usw.
 \makeatletter
 \renewtheoremstyle{plain}%
@@ -861,4 +862,90 @@ Laufzeit: $O(m\cdot n)$, wobei $n=|V(G)|$ und $m=|E(G)|$
 \begin{Satz}[Heiratssatz]
 Ein bipartiter Graph $G=(A\cupdot B, E(G))$ mit $|A|=|B|$ besitzt genau dann ein perfektes Matching, wenn $\Gamma(S)|\geq |S|$ für alle $S\subseteq A$.
 \end{Satz}
+\begin{Definition}
+Sei G ein gerichteter Graph, $u: E(G) \rightarrow \R_{\geq 0}$ (\herv{Kapazitäten}), und $s,t\in V(G)$ (\herv{Quelle} und \herv{Senke}), $s\neq t$, $(G,u,s,t)$ heißt \herv{Netzwerk}. Ein \herv{s-t-Fluss} in $(G,u)$ ist ein Funktion $f:E(G) \rightarrow \R_{\geq 0}$ mit $f(e)\leq u(e)\ \forall e \in E(G)$ und $f(\delta^-(v))=f(\delta^+(v))\ \forall v\in V(G)\setminus\{s,t\}$ (\herv{Flusserhaltungsbedingung}) und $\emph{val}(f):= f(\delta^+(s))-f(\delta^-(s))\geq 0$
+\end{Definition}
+\begin{Berechnungsproblem}[Fluss-Problem]\\
+\textbf{Eingabe:} ein Netzwerk $(G,u,s,t)$\\
+\textbf{Aufgabe:} Berechne einen $s-t-$Fluss in $(G,u)$ mit maximalem Wert.\\
+\textit{Bemerkung:} $f(e)=0\ \forall e$ ist immer $s-t-$Fluss.
+\end{Berechnungsproblem}
+\begin{Lemma}
+Sei $(G,u,s,t)$ ein Netzwerk und f ein $s-t-$Fluss in $(G,u)$. Dann gilt für alle $A\subset V(G)$ mit $s\in A, t\not\in A:$
+\begin{enumerate}
+\renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
+\item $\emph{val}(f) = f(\delta^+(A))-f(\delta^-(A))$
+\item $\emph{val}(f)\leq u(\delta^+(A))$
+\end{enumerate}
+\end{Lemma}
+\begin{Definition}
+Sei $(G,u,s,t)$ ein Netzwerk. Ein \herv{s-t-Schnitt} in G ist eine Kantenmenge $\delta^+(X)$ für eine Menge $X\subset V(G)$ mit $s\in X, t\not\in X$. Die \herv{Kapazität} eines s-t-Schnitts $\delta^+(X)$ ist $u(\delta^ +(X))$ (also die Summe der Kapazitäten seiner Kanten).
+\end{Definition}
+\begin{Definition}
+Sei $(G,u,s,t)$ ein Netzwerk und f ein s-t-Fluss. Für $e=(x,y)\in E(G)$ bezeichne $\stackrel{\leftarrow}{e}$ eine neue (nicht zu G gehörende) \herv{gegenläufige Kante} $(y,x)$. Dann ist der \herv{Residualgraph} $G_f$ definiert durch $V(G_f)=V(G)$ und $E(G_f):=\{e\in E(G):f(e)<u(e)\} \cupdot \{\stackrel{\leftarrow}{e}:e\in E(G), f(e)>0\}$. Ein \textbf{f-}\herv{augmentierender Weg} ist ein $s-t-$Weg in $G_f$. Die \herv{Residualkapazitäten} $u_f:E(G)\cupdot \{\stackrel{\leftarrow}{e} :e\in E(G)\}\rightarrow \R_{\geq 0}$ sind definiert durch $u_f(e):=u(e)-f(e)$ und $u_f(e):=f(\stackrel{\leftarrow}{e})$ für alle $e\in E(G)$.
+\end{Definition}
+\begin{Lemma}
+Sei $(G,u,s,t)$ ein Netzwerk, f ein s-t-Fluss und P ein f-augmentierender Weg. Sei $0\leq\gamma\leq\min\{u_f(e):e\in E(P)\}$. Dann definieren wir das Ergebnis der \herv{Augmentierung} von f entlang P um $\gamma$ als $f':E(G)\rightarrow \R_{\geq 0}$ mit \\$f'(e)=f(e)+\gamma\ \forall e\in E(G) \cap E(P)$\\
+$f'(e)=f(e)-\gamma\ \forall e\in E(G)$ mit $\stackrel{\leftarrow}{e}\in E(P)$\\
+$f'(e)=f(e)$ sonst. Dann ist $f'$ ein s-t-Fluss in $(G,u)$ und $\emph{val}(f')=\emph{val}(f)+\gamma$.
+\end{Lemma}
+\begin{Satz}
+Sei $(G,u,s,t)$ ein Netzwerk. Ein s-t-Fluss f in $(G,u)$ hat genau dann maximalen Wert, wenn es keinen f-augmentierenden Weg P gibt.
+\end{Satz}
+\begin{Satz}[Max-Flow-Min-Cut-Theorem]
+In jedem Netzwerk $(G,u,s,t)$ ist der maximale Wert eines s-t-Flusses gleich der Kapazität eines minimalen s-t-Schnittes.
+\end{Satz}
+\begin{Algorithmus}[Ford-Fulkerson-Algorithmus]\\
+\textbf{Eingabe:} ein Netzwerk $(G,u,s,t)$ mit ganzzahligen Kapazitäten\\
+\textbf{Ausgabe:} ein $s$-$t$-Fluss $f$ in $(G,u)$ mit maximalem Wert, der zudem ganzzahlig ist.
+\begin{tabbing}
+$f(e)\leftarrow 0\ \forall e\in E(G)$\\
+\textbf{while} es gibt einen $f$-augmentierenden Weg $P$ \textbf{do:}\\
+\text{\qquad}\=$\gamma\leftarrow \min\{u_f(e):e\in E(P)\}$\\
+\>Augmentiere $f$ entlang $P$ um $\gamma$.
+\end{tabbing}
+Laufzeit $O(mW)$, wobei $m=|E(G)|$ und $W$ der Wert des maximalen s-t-Flusses ist. (insbesondere ist $W\leq u(\delta^+(s)$)
+\end{Algorithmus}
+\begin{Korollar}
+Sei $(G,u,s,t)$ ein Netzwerk mit ganzzahligen Kapazitäten. Dann existiert ein s-t-Fluss in $(G,u)$, der maximalen Wert hat und ganzzahlig ist.
+\end{Korollar}
+\begin{Algorithmus}[Algorithmus von Edmonds und Karp]\\
+Finde in jeder Iteration des Ford-Fulkerson-Algorithmus einen kürzesten $f$-augmentierenden Weg (d.h. einen $s$-$t$-Weg $P$ in $G_f$ mit $|E(P)|$ minimal), z.B. mit Breitensuche.
+\end{Algorithmus}
+\begin{Lemma}
+Sei G ein gerichteter Graph und s und t zwei Knoten. Sei F die Vereinigung der Kantenmengen aller kürzesten s-t-Wege und $e\in F$. Dann ist F auch die Vereinigung der Kantenmengen aller kürzesten Wege in $(V(G), E(G)\cup \{\stackrel{\leftarrow}{e}\})$.
+\end{Lemma}
+\begin{Satz}
+Der Edmonds-Karp-Algorithmus terminiert nach höchstens $2|E(G)||V(G)|$ Iterationen, auch bei belieben Kapazitäten $u: E(G)\rightarrow \R_{\geq 0}$.
+\end{Satz}
+\section{Gauß-Elimination}
+\begin{Berechnungsproblem}[Lineare Gleichungssysteme]\\
+\textbf{Eingabe:} eine Matrix $A\in \R^{m\times n}$, ein Vektor $k\in\R^m$.\\
+\textbf{Aufgabe:} Berechne einen Vektor $x\in \R^n$ mit $Ax=b$, oder entscheide, dass keiner existiert.
+\end{Berechnungsproblem}
+Drei Operationen der Gauß-Elimination:
+\begin{enumerate}
+\renewcommand{\labelenumi}{(\arabic{enumi})}
+\item Vertauschen von Zeilen (inklusive entsprechender Einträge von $b$)
+\item Vertauschen von Spalten (inklusive entsprechender Einträge von $x$)
+\item Addition eines Vielfaches einer Zeile zu einer anderen.
+\end{enumerate}
+$\mathbbm{1}$ bezeichne die \textbf{quadratische Einheitsmatrix} $(\alpha_{ij})_{1\leq i,j\leq n}$, mit $\alpha_{ii}=1$ und alle anderen Einträge Null. Die Spalten $e_1,\ldots,e_n$ von $\mathbbm{1}$ werden als \textbf{Einheitsvektoren} bezeichnet. Weiterhin verwende Großbuchstaben als Bezeichnung für Matrizen; Vektoren werden mit kleinen Buchstaben bezeichnet und sind grundsätzlich Spaltenvektoren, es sei denn, sie werden transponiert. $v^\intercal$ ist dann ein Zeilenvektor. $v^\intercal w$ bezeichne das \textbf{innere Produkt}, auch \textbf{Standardskalarprodukt} genannt. Das \textbf{äußere Produkt} $v w^\intercal$ sei definiert wie die Multiplikation einer $m\times 1$-Matrix mit einer $1\times n$-Matrix, sodass das Ergebnis eine $m\times n$-Matrix ist.
+\begin{Lemma}
+Sei $A\in \R^{m\times n}, b\in \R^m$. Seien $p,q\in \{1,\ldots,\min\{m,n\}\}$ mit $p\neq q$ und $\delta\in \R$. Das $\delta$-fache der p-ten Zeile zur q-ten Zeile von A zu addieren bedeutet, A durch GA zu ersetzen, wobei $G:=\mathbbm{1}+\delta e_q e_p^\intercal \in \R^{m\times m}$. G ist nichtsingulär (d.h. G ist invertierbar), und es gilt $G^{-1}=\delta e_q e_p^\intercal$ und $\{x: Ax=b\}=\{x: GAx=Gb\}$. Ferner haben A und GA denselben Rang und im Falle $m=n$ dieselbe Determinante.
+\end{Lemma}
+\begin{Definition}
+Eine Matrix $A=(\alpha_{ij})\in R^{m\times n}$ heißt \herv{obere Dreiecksmatrix}, falls $\alpha_{ij}=0$ für alle $i>j$ gilt. A heißt \herv{untere Dreiecksmatrix}, falls $\alpha_{ij}=0$ für alle $i<j$ gilt. Eine quadratische Dreiecksmatrix heißt normiert, falls $\alpha_{ii}=1$ für alle $i=1,\ldots,m$.
+\end{Definition}
+\begin{Prop}
+Eine normierte untere Dreiecksmatrix ist nichtsingulär und hat Determinante 1. Ihre Inverse ist ebenfalls eine normierte untere Dreiecksmatrix.
+\end{Prop}
+\begin{Lemma}
+Sei $A=(\alpha_{ij})\in \R^{m\times n}$ und $p\in \{1,\ldots,\min\{m,n\}\}$ mit $\alpha_{ii}\neq 0$ für alle $i=1,\ldots,p$ und $\alpha_{ij}=0$ für alle $j<p$ und $i>j$. Dann gibt es eine normierte untere Dreiecksmatrix $G\in \R^{m\times m}$ so dass $GA=(\alpha'_{ij})$ mit $\alpha'_{ii}\neq 0$ für alle $i=1,\ldots,p$ und $\alpha'_{ij}=0$ für alle $j\leq p$ und $i>j$. Ein solches G und die Matrix GA kann in $O(mn)$ Rechenschritten berechnet werden. \\
+$G=\prod_{i=p+1}^m{\left(\mathbbm{1}-\frac{\alpha_{ip}}{\alpha_{pp}}e_i e_p^\intercal\right)} =\mathbbm{1}-\sum_{i=p+1}^m{\frac{\alpha_{ip}}{\alpha_{pp}}e_i e_p^\intercal}$.
+\end{Lemma}
+\begin{Lemma}
+Sei $A=(\alpha_{ij})\in \R^{m\times n}$ obere Dreiecksmatrix und $b=(\beta_1,\ldots,\beta_m)^\intercal \in \R^m$. Für alle $i=1,\ldots,m$ gelte entweder $(i\leq n$ und $a_{ii}\neq 0)$ oder $(\beta_i=0$ und $\alpha_{ij}=0$ für alle $j=1,\ldots,n)$. Dann ist die Menge der Lösungen von $Ax=b$ gegeben durch $x=(\xi_1,\ldots,\xi_n)$ mit $\xi_i\in \R$ beliebig für alle i mit $i>m$ oder $\alpha_{ii}=0$, und 
+\[ \xi_i=\frac{1}{\alpha_{ii}}\left(\beta_i-\sum_{j=i+1}^n{\alpha_{ij}\xi_j}\right) \text{ für }i=\min\{m,n\},\ldots,1\text{ mit }\alpha_{ii}\neq 0 .\]
+\end{Lemma}
 \end{document}
