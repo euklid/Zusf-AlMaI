@@ -948,4 +948,33 @@ $G=\prod_{i=p+1}^m{\left(\mathbbm{1}-\frac{\alpha_{ip}}{\alpha_{pp}}e_i e_p^\int
 Sei $A=(\alpha_{ij})\in \R^{m\times n}$ obere Dreiecksmatrix und $b=(\beta_1,\ldots,\beta_m)^\intercal \in \R^m$. Für alle $i=1,\ldots,m$ gelte entweder $(i\leq n$ und $a_{ii}\neq 0)$ oder $(\beta_i=0$ und $\alpha_{ij}=0$ für alle $j=1,\ldots,n)$. Dann ist die Menge der Lösungen von $Ax=b$ gegeben durch $x=(\xi_1,\ldots,\xi_n)$ mit $\xi_i\in \R$ beliebig für alle i mit $i>m$ oder $\alpha_{ii}=0$, und 
 \[ \xi_i=\frac{1}{\alpha_{ii}}\left(\beta_i-\sum_{j=i+1}^n{\alpha_{ij}\xi_j}\right) \text{ für }i=\min\{m,n\},\ldots,1\text{ mit }\alpha_{ii}\neq 0 .\]
 \end{Lemma}
+\begin{Definition}[Exkurs Determinanten]
+Seien $A,B\in \R^{n\times n}$, $A=(\alpha_{ij})$ $n\in \N$. Dann ist \[
+\det A:=\sum_{\sigma \in S_n}^n{\emph{sgn}(\sigma)\prod_{i=1}^n{a_i\sigma_i}}\] mit \emph{sgn}$(\sigma)=\left\lbrace\begin{array}{ll} 1,&\text{wenn }\sigma\text{durch gerade Anzahl an Vertauschungen in die Identität}\\&\text{überführt werden kann} \\ -1,&\text{sonst} \end{array} \right.$\\
+Eigenschaften: \begin{itemize}
+\item $\det A=0 \Leftrightarrow A$ singulär $\Leftrightarrow$ \emph{Rang}$(A)<n$
+\item $\det(AB)=(\det A)(\det B)$
+\item $\det(A)=\det(A^\intercal)$
+\item Sei $k\in \{1,\ldots,n\}$. Dann ist $\det A=\sum_{l=1}^n{(-1)^{k+l}\cdot \alpha_{kl}\cdot \det\left( (\alpha_{ij})_{1\leq (i\neq k),(j\neq l)\leq n}\right)}$\\ \herv{(Laplace'scher Entwicklungssatz)}
+\end{itemize}
+\end{Definition}
+\begin{Satz}
+Lineare Gleichungssysteme $Ax=b$ mit $A\in \R^{m\times n}$ und $b\in \R^m$ können mit $O(mn(r+1))$ elementaren Rechenoperationen gelöst werden, wobei r der Rang von A ist.
+\end{Satz}
+\begin{Definition}
+Eine \herv{LU-Zerlegung} einer Matrix $A\in \R^{m\times n}$ besteht aus einer normierten unteren Dreiecksmatrix L und einer oberen Dreiecksmatrix U mit $L\cdot U=A$.
+\end{Definition}
+Eine Matrix hat höchstens eine $LU$-Zerlegung, z.B. hat $\left(\begin{matrix}
+0 & 1 \\ 1& 0 \end{matrix}\right)$ keine $LU$-Zerlegung.
+\begin{Definition}
+Sei $n\in \N$ und $\sigma: \{1,2\ldots,n\} \rightarrow \{1,2,\ldots,n\}$ eine Permutation. Die zu $\sigma$ gehörende Permutationsmatrix (der Ordnung n) ist die Matrix $P_{\sigma}(\pi_{ij})\in\{0,1\}^{n\times n}$ mit $\pi_{ij}=1 \Leftrightarrow \sigma(i)=j$. Eine \herv{voll pivotisierte LU-Zerlegung} einer Matrix $A\in \R^{m\times n}$ besteht aus einer normierten unteren Dreiecksmatrix L, einer oberen Dreiecksmatrix U und zwei Permutationen $\sigma$ und $\tau$ mit $A=P_\sigma^{\tau}LUP_{\tau}$ sowie der Eigenschaft, dass ein Diagonalelement $u_{ii}$ von $U=(u_{ij})$ nur dann null ist, wenn die Zeilen i bis m von u komplett null sind.
+\end{Definition}
+\begin{Prop}
+Für alle $n\in \N$ bilden die Permutationsmatrizen der Ordnung n mit der Multiplikation eine Gruppe (mit $\mathbbm{1}=P_{id}$ als neutrales Element. Für jede Permuation P ist $P\cdot P^{\intercal} =\mathbbm{1}$).
+\end{Prop}
+Eine voll pivotisierte $LU$-Zerlegung heißt teilpivotisierte $LU$-Zerlegung, wenn $\tau=id$. Nichtsinguläre Matrizen $A$ haben immer teilpivotisierte $LU$-Zerlegung, und die Gauß-Elimination kommt bei ihnen ohne Spaltenvertauschungen aus.
+\begin{Satz}
+Sei $Ax=b$ ein lineares Gleichungssystem mit $A\in \R^{m\times n}$. Kennen wir eine voll pivotisierte LU-Zerlegung von A, so können wir das lineare Gleichungssystem $Ax=b$ mit $O(m\cdot \max\{n,m\})$ Rechenoperationen lösen.\\
+$A=P_{\sigma}^{\tau}LUP_{\tau}$; $P_{\sigma}^{\tau}z'=b;$ $Lz''=z';$ $Uz'''=z'':$ $P_{\tau}x=z'''$.
+\end{Satz}
 \end{document}
