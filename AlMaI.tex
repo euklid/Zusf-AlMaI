@@ -977,4 +977,46 @@ Eine voll pivotisierte $LU$-Zerlegung heißt teilpivotisierte $LU$-Zerlegung, we
 Sei $Ax=b$ ein lineares Gleichungssystem mit $A\in \R^{m\times n}$. Kennen wir eine voll pivotisierte LU-Zerlegung von A, so können wir das lineare Gleichungssystem $Ax=b$ mit $O(m\cdot \max\{n,m\})$ Rechenoperationen lösen.\\
 $A=P_{\sigma}^{\tau}LUP_{\tau}$; $P_{\sigma}^{\tau}z'=b;$ $Lz''=z';$ $Uz'''=z'':$ $P_{\tau}x=z'''$.
 \end{Satz}
+\begin{Algorithmus}[Gauß-Elimination]\label{Gauss-Elim}\\
+\textbf{Eingabe:} eine Matrix $A\in\R^{m\times n}$\\
+\textbf{Ausgabe:} eine voll pivotisierte $LU$-Zerlegung $(\sigma,L,U,\tau)$ von $A$ (d.h. $\sigma$ und $\tau$ sind Permutationen, und $L$ ist normierte untere Dreiecksmatrix, $U=(u_{ij})$ ist obere Dreiecksmatrix und $u_{ii}=0 \rightarrow$ alle Zeilen $i,\ldots,m$ sind komplett Null, $A=P_{\sigma}^\intercal LUP_{\tau}, P_{\sigma}=(\pi_{ij})$ mit $\pi_{ij}=\left\lbrace\begin{array}{ll}1,&\text{falls }j=\sigma(i)\\ 0,&\text{sonst}\end{array}\right.$ und der Rang $r$ von $A$.
+\begin{tabbing}
+$\sigma(i)\gets i$  $(i=1,\ldots,m)$\\
+$L=(\lambda_{ij}\gets \mathbbm{1}\in\R^{m\times m}$\\
+$U=(u_{ij}\gets A$\\
+$\tau(i)\gets i$  $(i=1,\ldots,n)$\\
+$r\gets 0$\\
+\textbf{while }$\exists p,q> r$ mit $u_{pq}\neq 0$ \textbf{do:}\\
+\text{\qquad}\=wähle $p\in\{r+1,\ldots,m\}$ und $q\in\{r+1,\ldots,n\}$ mit $u_{pq}\neq 0$ (Pivotelement)\+ \\
+$r\gets r+1$\\
+\textbf{if} $p\neq r$ \textbf{then} \textbf{swap}$(u_{p*},u_{r*}),$ \textbf{swap}$(\lambda_{p*},\lambda_{r*})$, \textbf{swap}$(\lambda_{*p},\lambda_{*r}),$ \textbf{swap}$(\sigma(p),\sigma(r))$\\
+\textbf{if} $q\neq r$ \textbf{then} \textbf{swap}$(u_{*p},u_{*r})$, \textbf{swap}$(\tau(q),\tau(r))$\\
+\textbf{for} $i\gets r+1$ \textbf{to} $m$ \textbf{do:}\\
+\text{\qquad}\=$\lambda_{ir}\gets\frac{u_{ir}}{u_{rr}}$\+\\
+\textbf{for} $j\gets r$ \textbf{to} $n$ \textbf{do:} $u_{ij}\gets u_{ij}-\lambda_{ir}u_{ri}$
+\end{tabbing}
+benötigt $O(mn(r+1)$ elementare Rechenoperationen, $r$ ist Rang von $A$.
+\end{Algorithmus}
+\begin{Korollar}
+Die Determinante einer gegebene Matrix $A\in\R^{n\times n}$ lässt sich in $O(n^3)$ Rechenschritten berechnen.\\
+$det(A)=(-1)^{k+l}\cdot\prod_{i=1}^n{u_{ii}}$, wobei k und l die Anzahl der Zeilen- bzw. Spaltenvertauschungen während der Gauß-Elimination sind.
+\end{Korollar}
+\begin{Korollar}
+Sei $A\in\R^{n\times n}$ gegeben. Dann kann man in $O(n^3)$ Zeit $A^{-1}$ berechnen, oder entscheiden, dass A singulär ist.\\
+voll pivotisierte LU-Zerlegung berechnen. $\emph{Rang}(A)=n\Rightarrow$ Gleichungssysteme $Ax=e_i$  $(i=1,\ldots,n)$ lösen (in $O(n^2)$ Zeit). Lösungen sind Spalten von $A^{-1}$.
+\end{Korollar}
+\begin{Lemma}
+Alle im Laufe der Gauß-Elimination \ref{Gauss-Elim} vorkommenden Zahlen sind entweder $0$ oder Einträge von A oder, bis auf das Vorzeichen, Quotienten von Subdeterminanten von A.
+\end{Lemma}
+Eine \textbf{Subdeterminante} einer Matrix $A\in\R^{m\times n}$ ist die Determinante einer Teilmatrix $A_{IJ}:(a_{ij})_{i\in I, j\in J}$ mit $I\subseteq\{1,\ldots,m\}; J\subseteq\{1,\ldots,n\}; |I|=|J|\neq 0$. 
+\begin{center}{\textbf{\textsc{+++ SCHLUSSSTRICH FÜR DIE ERSTE KLAUSUR! +++}}} \end{center}
+\rule{\textwidth}{3pt}
+\begin{Lemma}
+Sei $n\in\N$ und $A=(\alpha_{ij})\in\mathbb{Q}^{n\times n}$ mit $\alpha_{ij}=\frac{p_{ij}}{q_{ij}},p_{ij}\in\Z,q_{ij}\in\N$. Sei $k:=\sum_{i,j=1}^n\left(\lceil\log_2(|p_{ij}|+1)\rceil+\lceil\log_2(q_{ij}+1)\rceil\right)$. Dann existieren $p\in\Z$ und $q\in\N$ mit $\det(A)=\frac{p}{q}$ und $\lceil\log_2(|p|+1)\rceil+\lceil\log_2(q+1)\rceil\leq 2k$.
+\end{Lemma}
+\begin{Satz}
+Die Gauß-Elimination (Alg. \ref{Gauss-Elim}) ist ein polynomieller Algorithmus.
+\end{Satz}
+Weitere Inhalte folgen erst \textbf{NACH} der \textbf{ERSTEN KLAUSUR}, da diese erst für die zweite gebraucht werden. Aus privaten Gründen werde ich nicht an der zweiten Klausurrunde teilnehmen können und konzentriere mich daher nur auf den Stoff, der für die ersten Klausuren nötig ist.
+Wer fleißig ist, kann natürlich die Zusammenfassung fortführen und dies auch gern mir mitteilen, dann habe ich weniger zu tun.
 \end{document}
