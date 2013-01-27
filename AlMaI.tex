@@ -215,13 +215,13 @@ Seien l und $b\geq 2$ natürliche Zahlen. Sei $Z:=\left\lbrace -\left\lceil\frac
 \item Ist $x+y \in Z$, dann ist $f(x+y)=(f(x)+f(y))\mod b^l$
 \item Ist $x\cdot y \in Z$, dann ist $f(x\cdot y)=(f(x)\cdot f(y))\mod b^l$
 \item Ist $-x \in Z$, so gilt $f(-x)=K_b^{b,l}(x)$
-\item Sei b=2, dann ist $x\geq 0$ genau dann, wenn die erste Stelle der l-stelligen Binärdarstellung von x 0 ist.
+\item Sei $b=2$, dann ist $x\geq 0$ genau dann, wenn die erste Stelle der l-stelligen Binärdarstellung von x $0$ ist.
 \end{enumerate}
 \end{Satz}
 \section{Rechnen mit ganzen Zahlen}
 \subsection{Addition und Subtraktion}
 \begin{Prop}
-Für zwei ganze Zahlen x und y können die Summe x+y und Differenz x-y in Laufzeit O(l) berechnet werden, wobei $l=1+\lfloor \log_2(max\{|x|,|y|,1\})\rfloor$ ist.
+Für zwei ganze Zahlen x und y können die Summe $x+y$ und Differenz $x-y$ in Laufzeit $O(l)$ berechnet werden, wobei $l=1+\lfloor \log_2(max\{|x|,|y|,1\})\rfloor$ ist.
 \end{Prop}
 \subsection{Multiplikation}
 Zwei Zahlen mit bis zu $l$ Stellen nach der Schulmethode zu multiplizieren braucht $O(l^2)$ Zeit.
@@ -232,7 +232,7 @@ Zwei Zahlen mit bis zu $l$ Stellen nach der Schulmethode zu multiplizieren brauc
 \textbf{else:}\\
 \text{\qquad}$l \leftarrow 1+ \lfloor \log_2 (\max\{x,y\})\rfloor$\\
 \text{\qquad}$K \leftarrow \lfloor \frac{l}{2} \rfloor$ \\
-\text{\qquad}$B \leftarrow 2^k$\\
+\text{\qquad}$B \leftarrow 2^K$\\
 \text{\qquad}$x' \leftarrow \lfloor\frac{x}{B} \rfloor$\\
 \text{\qquad}$x'' \leftarrow x\mod B$\\
 \text{\qquad}$y' \leftarrow \lfloor\frac{y}{B} \rfloor$\\
@@ -440,7 +440,7 @@ $E(G)\subseteq\{\{v,w\}:v,w\in V(G), v\neq w\}$ bzw. $E(G)\subseteq\{(v,w):v,w\i
 $\Psi(e)=\{v,w\}$ oder $\Psi(e)=(v,w)$. Man sagt e \herv{verbindet} v und w, e \herv{geht von} v \herv{nach} w, e ist mit v und w \herv{inzident}, v und w sind \herv{Nachbarn (adjazent)}, v und w sind die \herv{Endknoten von} e.
 \end{Definition}
 \begin{Definition}
-Sei G ein gerichteter Graph und $X\subseteq V(G)$. Dann sei 
+Sei G ein ungerichteter Graph und $X\subseteq V(G)$. Dann sei 
 \[ \delta(X):=\{e=\{x,y\}\in E(G): x\in X, y \in V(G)\setminus X\} \]
 Die \herv{Nachbarschaft} von X ist die Menge
 \[ \Gamma(X):=\{v\in V(G)\setminus X: \delta(X) \cap \delta(\{v\})\neq \emptyset \} \]
@@ -867,11 +867,11 @@ Sei G ein gerichteter Graph, $u: E(G) \rightarrow \R_{\geq 0}$ (\herv{Kapazität
 \end{Definition}
 \begin{Berechnungsproblem}[Fluss-Problem]\\
 \textbf{Eingabe:} ein Netzwerk $(G,u,s,t)$\\
-\textbf{Aufgabe:} Berechne einen $s-t-$Fluss in $(G,u)$ mit maximalem Wert.\\
-\textit{Bemerkung:} $f(e)=0\ \forall e$ ist immer $s-t-$Fluss.
+\textbf{Aufgabe:} Berechne einen $s$-$t$-Fluss in $(G,u)$ mit maximalem Wert.\\
+\textit{Bemerkung:} $f(e)=0\ \forall e$ ist immer $s$-$t$-Fluss.
 \end{Berechnungsproblem}
 \begin{Lemma}
-Sei $(G,u,s,t)$ ein Netzwerk und f ein $s-t-$Fluss in $(G,u)$. Dann gilt für alle $A\subset V(G)$ mit $s\in A, t\not\in A:$
+Sei $(G,u,s,t)$ ein Netzwerk und f ein $s$-$t$-Fluss in $(G,u)$. Dann gilt für alle $A\subset V(G)$ mit $s\in A, t\not\in A:$
 \begin{enumerate}
 \renewcommand{\labelenumi}{\emph{(\alph{enumi})}}
 \item $\emph{val}(f) = f(\delta^+(A))-f(\delta^-(A))$
@@ -882,7 +882,7 @@ Sei $(G,u,s,t)$ ein Netzwerk und f ein $s-t-$Fluss in $(G,u)$. Dann gilt für al
 Sei $(G,u,s,t)$ ein Netzwerk. Ein \herv{s-t-Schnitt} in G ist eine Kantenmenge $\delta^+(X)$ für eine Menge $X\subset V(G)$ mit $s\in X, t\not\in X$. Die \herv{Kapazität} eines s-t-Schnitts $\delta^+(X)$ ist $u(\delta^ +(X))$ (also die Summe der Kapazitäten seiner Kanten).
 \end{Definition}
 \begin{Definition}
-Sei $(G,u,s,t)$ ein Netzwerk und f ein s-t-Fluss. Für $e=(x,y)\in E(G)$ bezeichne $\stackrel{\leftarrow}{e}$ eine neue (nicht zu G gehörende) \herv{gegenläufige Kante} $(y,x)$. Dann ist der \herv{Residualgraph} $G_f$ definiert durch $V(G_f)=V(G)$ und $E(G_f):=\{e\in E(G):f(e)<u(e)\} \cupdot \{\stackrel{\leftarrow}{e}:e\in E(G), f(e)>0\}$. Ein \textbf{f-}\herv{augmentierender Weg} ist ein $s-t-$Weg in $G_f$. Die \herv{Residualkapazitäten} $u_f:E(G)\cupdot \{\stackrel{\leftarrow}{e} :e\in E(G)\}\rightarrow \R_{\geq 0}$ sind definiert durch $u_f(e):=u(e)-f(e)$ und $u_f(e):=f(\stackrel{\leftarrow}{e})$ für alle $e\in E(G)$.
+Sei $(G,u,s,t)$ ein Netzwerk und f ein s-t-Fluss. Für $e=(x,y)\in E(G)$ bezeichne $\stackrel{\leftarrow}{e}$ eine neue (nicht zu G gehörende) \herv{gegenläufige Kante} $(y,x)$. Dann ist der \herv{Residualgraph} $G_f$ definiert durch $V(G_f)=V(G)$ und $E(G_f):=\{e\in E(G):f(e)<u(e)\} \cupdot \{\stackrel{\leftarrow}{e}:e\in E(G), f(e)>0\}$. Ein \textbf{f-}\herv{augmentierender Weg} ist ein s-t-Weg in $G_f$. Die \herv{Residualkapazitäten} $u_f:E(G)\cupdot \{\stackrel{\leftarrow}{e} :e\in E(G)\}\rightarrow \R_{\geq 0}$ sind definiert durch $u_f(e):=u(e)-f(e)$ und $u_f(e):=f(\stackrel{\leftarrow}{e})$ für alle $e\in E(G)$.
 \end{Definition}
 \begin{Lemma}
 Sei $(G,u,s,t)$ ein Netzwerk, f ein s-t-Fluss und P ein f-augmentierender Weg. Sei $0\leq\gamma\leq\min\{u_f(e):e\in E(P)\}$. Dann definieren wir das Ergebnis der \herv{Augmentierung} von f entlang P um $\gamma$ als $f':E(G)\rightarrow \R_{\geq 0}$ mit \\$f'(e)=f(e)+\gamma\ \forall e\in E(G) \cap E(P)$\\
@@ -932,7 +932,7 @@ Drei Operationen der Gauß-Elimination:
 \end{enumerate}
 $\mathbbm{1}$ bezeichne die \textbf{quadratische Einheitsmatrix} $(\alpha_{ij})_{1\leq i,j\leq n}$, mit $\alpha_{ii}=1$ und alle anderen Einträge Null. Die Spalten $e_1,\ldots,e_n$ von $\mathbbm{1}$ werden als \textbf{Einheitsvektoren} bezeichnet. Weiterhin verwende Großbuchstaben als Bezeichnung für Matrizen; Vektoren werden mit kleinen Buchstaben bezeichnet und sind grundsätzlich Spaltenvektoren, es sei denn, sie werden transponiert. $v^\intercal$ ist dann ein Zeilenvektor. $v^\intercal w$ bezeichne das \textbf{innere Produkt}, auch \textbf{Standardskalarprodukt} genannt. Das \textbf{äußere Produkt} $v w^\intercal$ sei definiert wie die Multiplikation einer $m\times 1$-Matrix mit einer $1\times n$-Matrix, sodass das Ergebnis eine $m\times n$-Matrix ist.
 \begin{Lemma}
-Sei $A\in \R^{m\times n}, b\in \R^m$. Seien $p,q\in \{1,\ldots,\min\{m,n\}\}$ mit $p\neq q$ und $\delta\in \R$. Das $\delta$-fache der p-ten Zeile zur q-ten Zeile von A zu addieren bedeutet, A durch GA zu ersetzen, wobei $G:=\mathbbm{1}+\delta e_q e_p^\intercal \in \R^{m\times m}$. G ist nichtsingulär (d.h. G ist invertierbar), und es gilt $G^{-1}=\delta e_q e_p^\intercal$ und $\{x: Ax=b\}=\{x: GAx=Gb\}$. Ferner haben A und GA denselben Rang und im Falle $m=n$ dieselbe Determinante.
+Sei $A\in \R^{m\times n}, b\in \R^m$. Seien $p,q\in \{1,\ldots,\min\{m,n\}\}$ mit $p\neq q$ und $\delta\in \R$. Das $\delta$-fache der p-ten Zeile zur q-ten Zeile von A zu addieren bedeutet, A durch GA zu ersetzen, wobei $G:=\mathbbm{1}+\delta e_q e_p^\intercal \in \R^{m\times m}$. G ist nichtsingulär (d.h. G ist invertierbar), und es gilt $G^{-1}=\mathbbm{1}-\delta e_q e_p^\intercal$ und $\{x: Ax=b\}=\{x: GAx=Gb\}$. Ferner haben A und GA denselben Rang und im Falle $m=n$ dieselbe Determinante.
 \end{Lemma}
 \begin{Definition}
 Eine Matrix $A=(\alpha_{ij})\in R^{m\times n}$ heißt \herv{obere Dreiecksmatrix}, falls $\alpha_{ij}=0$ für alle $i>j$ gilt. A heißt \herv{untere Dreiecksmatrix}, falls $\alpha_{ij}=0$ für alle $i<j$ gilt. Eine quadratische Dreiecksmatrix heißt normiert, falls $\alpha_{ii}=1$ für alle $i=1,\ldots,m$.
