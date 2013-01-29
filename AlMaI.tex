@@ -93,7 +93,7 @@ Algorithmus (keine formale Definition): \glqq ein Programm \grqq \begin{itemize}
 \begin{Definition}
 Seien A und B zwei Mengen. Dann ist deren \herv{Produkt} durch \\
 $A\times B := \{(a,b): a \in A, b\in B \}$ \\
-Eine \herv{Relation} auf (A,B) ist eine Teilmenge von $A\times B $
+Eine \herv{Relation} auf $(A,B)$ ist eine Teilmenge von $A\times B $
 \end{Definition}
 \begin{Definition}
 Seien A und B Mengen und $f\subseteq A\times B$, so dass es für jedes $a \in A$ genau ein b gibt mit $(a,b)\in f$. Dann heißt f \herv{Funktion} von A nach B. Statt $(a,b) \in f$ schreiben wir $f(a)=b$ oder $a \mapsto f(a)$. \\
@@ -146,7 +146,7 @@ Sei $g: \mathbb{N} \rightarrow \mathbb{R}_{\geq 0}$. Dann definieren wir: \\
 $O(g):=\{f:\mathbb{N}\rightarrow\mathbb{R}_{\geq 0}: \exists \alpha >0\ \exists n_0 \in \mathbb{N}\ \forall n\geq n_0: f(n)\leq \alpha g(n)\}$ \\
 $\Omega(g):=\{f:\mathbb{N}\rightarrow\mathbb{R}_{\geq 0}: \exists \alpha >0\ \exists n_0 \in \mathbb{N}\ \forall n\geq n_0: f(n)\geq \alpha g(n)\}$\\
 $\Theta(g):=O(g)\cap\Omega(g)$ \\
-Statt $f\in O(g)$ sagen wir auch \glqq $f$ ist $O(g)$\grqq oder sogar \glqq$f=O(g)$\grqq
+Statt $f\in O(g)$ sagen wir auch \glqq $f$ ist $O(g)$\grqq\ oder sogar \glqq$f=O(g)$\grqq
 \end{Definition}
 \begin{Berechnungsproblem}[Liste von Primzahlen]\\
 \textbf{Eingabe:} $n \in \N$ \\
@@ -168,7 +168,7 @@ Hat Laufzeit $O(n\log n)$.
 Sei $k\in \N, l\in \N\cup\{0\}$. Definiere $f^l: \{0,\ldots,k-1\}^l\rightarrow \{0,\ldots,k^ l-1\}$ durch $f^l(w):=\sum_{i=1}^l a_i k^{l-i}$ für $w=a_1\ldots a_l$. Dann ist $f^l$ wohldefiniert und bijektiv.
 \end{Lemma}
 \begin{Satz}
-Sei $A$ eine nichtleere endliche Menge, Dann ist $A^*$ abzählbar.
+Sei $A$ eine nichtleere endliche Menge, dann ist $A^*$ abzählbar.
 \end{Satz}
 \begin{Korollar}
 Die Menge aller C++-Programme ist abzählbar.
@@ -181,7 +181,7 @@ $f(x,y):=\left\lbrace\begin{array}{l}
 1, \text{ falls }g(x) \text{ bei Eingabe }y\text{ nach endlich vielen Schritten hält.}\\ 
 0, \text{ sonst.}
 \end{array} \right.$\\
-Diese Entscheidungsproblem heißt \textbf{Halteproblem}.
+Dieses Entscheidungsproblem heißt \textbf{Halteproblem}.
 \begin{Satz}
 $f$ wird von keinem C++-Programm berechnet.
 \end{Satz}
@@ -615,7 +615,8 @@ Wichtige Variaten:
 \subsection{Breitensuche}
 Für zwei $v$ und $w$ in einem Graphen $G$ bezeichnet $\text{dist}(v,w)$ die Länge eines kürzesten Weges von $v$ nach $w$ ($v$-$w$-Weg) in $G$ (oder $\infty$, wenn kein $v$-$w$-Weg existiert); $\text{dist}(v,w)$ heißt auch \textbf{Abstand} von $v$ nach $w$.
 \begin{Satz}
-Jeder BFS-Baum enthält einen kürzesten Weg von einem Knoten r zu allen von r aus erreichbaren Knoten. Die Zahlen \emph{dist}$(r,v)$ $\forall v\in V(G)$ können in linearer Zeit $O(n+m)$ bestimmt werden.
+Jeder BFS-Baum enthält einen kürzesten Weg von einem Knoten r zu allen von r aus erreichbaren Knoten. Die Zahlen \emph{dist}$(r,v)$ $\forall v\in V(G)$ können in linearer Zeit $O(n+m)$ bestimmt werden.\\
+$dist(v)=dist(u)+1,$, wenn $(u,v)$ im BFS-Baum (u ist Vorgänger von v), $dist(r)=0$. Da BFS-Baum in linearer Zeit bestimmt werden kann, und $dist$ für jeden Knoten nur einmal berechnet wird, ist das in linearer Zeit möglich.
 \end{Satz}
 \subsection{Bipartite Graphen}
 \begin{Definition}
@@ -882,7 +883,7 @@ Sei $(G,u,s,t)$ ein Netzwerk und f ein $s$-$t$-Fluss in $(G,u)$. Dann gilt für 
 Sei $(G,u,s,t)$ ein Netzwerk. Ein \herv{s-t-Schnitt} in G ist eine Kantenmenge $\delta^+(X)$ für eine Menge $X\subset V(G)$ mit $s\in X, t\not\in X$. Die \herv{Kapazität} eines s-t-Schnitts $\delta^+(X)$ ist $u(\delta^ +(X))$ (also die Summe der Kapazitäten seiner Kanten).
 \end{Definition}
 \begin{Definition}
-Sei $(G,u,s,t)$ ein Netzwerk und f ein s-t-Fluss. Für $e=(x,y)\in E(G)$ bezeichne $\stackrel{\leftarrow}{e}$ eine neue (nicht zu G gehörende) \herv{gegenläufige Kante} $(y,x)$. Dann ist der \herv{Residualgraph} $G_f$ definiert durch $V(G_f)=V(G)$ und $E(G_f):=\{e\in E(G):f(e)<u(e)\} \cupdot \{\stackrel{\leftarrow}{e}:e\in E(G), f(e)>0\}$. Ein \textbf{f-}\herv{augmentierender Weg} ist ein s-t-Weg in $G_f$. Die \herv{Residualkapazitäten} $u_f:E(G)\cupdot \{\stackrel{\leftarrow}{e} :e\in E(G)\}\rightarrow \R_{\geq 0}$ sind definiert durch $u_f(e):=u(e)-f(e)$ und $u_f(e):=f(\stackrel{\leftarrow}{e})$ für alle $e\in E(G)$.
+Sei $(G,u,s,t)$ ein Netzwerk und f ein s-t-Fluss. Für $e=(x,y)\in E(G)$ bezeichne $\stackrel{\leftarrow}{e}$ eine neue (nicht zu G gehörende) \herv{gegenläufige Kante} $(y,x)$. Dann ist der \herv{Residualgraph} $G_f$ definiert durch $V(G_f)=V(G)$ und $E(G_f):=\{e\in E(G):f(e)<u(e)\} \cupdot \{\stackrel{\leftarrow}{e}:e\in E(G), f(e)>0\}$. Ein \textbf{f-}\herv{augmentierender Weg} ist ein s-t-Weg in $G_f$. Die \herv{Residualkapazitäten} $u_f:E(G)\cupdot \{\stackrel{\leftarrow}{e} :e\in E(G)\}\rightarrow \R_{\geq 0}$ sind definiert durch $u_f(e):=u(e)-f(e)$ und $u_f(\stackrel{\leftarrow}{e}):=f(e)$ für alle $e\in E(G)$.
 \end{Definition}
 \begin{Lemma}
 Sei $(G,u,s,t)$ ein Netzwerk, f ein s-t-Fluss und P ein f-augmentierender Weg. Sei $0\leq\gamma\leq\min\{u_f(e):e\in E(P)\}$. Dann definieren wir das Ergebnis der \herv{Augmentierung} von f entlang P um $\gamma$ als $f':E(G)\rightarrow \R_{\geq 0}$ mit \\$f'(e)=f(e)+\gamma\ \forall e\in E(G) \cap E(P)$\\
@@ -916,7 +917,7 @@ Finde in jeder Iteration des Ford-Fulkerson-Algorithmus einen kürzesten $f$-aug
 Sei G ein gerichteter Graph und s und t zwei Knoten. Sei F die Vereinigung der Kantenmengen aller kürzesten s-t-Wege und $e\in F$. Dann ist F auch die Vereinigung der Kantenmengen aller kürzesten Wege in $(V(G), E(G)\cup \{\stackrel{\leftarrow}{e}\})$.
 \end{Lemma}
 \begin{Satz}
-Der Edmonds-Karp-Algorithmus terminiert nach höchstens $2|E(G)||V(G)|$ Iterationen, auch bei belieben Kapazitäten $u: E(G)\rightarrow \R_{\geq 0}$.
+Der Edmonds-Karp-Algorithmus terminiert nach höchstens $2|E(G)||V(G)|$ Iterationen, auch bei beliebigen Kapazitäten $u: E(G)\rightarrow \R_{\geq 0}$.
 \end{Satz}
 \section{Gauß-Elimination}
 \begin{Berechnungsproblem}[Lineare Gleichungssysteme]\\
